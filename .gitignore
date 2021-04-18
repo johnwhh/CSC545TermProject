@@ -1,1 +1,4 @@
 .DS_Store
+/MealPlanner/target/
+/MealPlanner/nbproject/private/
+/MealPlanner/build/
