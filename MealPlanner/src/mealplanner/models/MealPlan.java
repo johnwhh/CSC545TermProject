@@ -58,4 +58,9 @@ public class MealPlan {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
+
+    @Override
+    public String toString() {
+        return "MealPlan{" + "id=" + id + ", type=" + type + ", date=" + date + ", recipe=" + recipe + '}';
+    }
 }

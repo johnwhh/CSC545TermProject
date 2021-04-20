@@ -13,9 +13,11 @@ import mealplanner.models.*;
 public class FridgeViewController extends JPanel {
 
     private final FridgeModel fridgeModel;
+    private final FoodModel foodModel;
 
     public FridgeViewController() {
         this.fridgeModel = new FridgeModel();
+        this.foodModel = new FoodModel();
 
         setupPanel();
     }

@@ -118,4 +118,9 @@ public class Food {
     public void setCarbs(int carbs) {
         this.carbs = carbs;
     }
+
+    @Override
+    public String toString() {
+        return "Food{" + "id=" + id + ", name=" + name + ", group=" + group + ", calories=" + calories + ", sugar=" + sugar + ", protein=" + protein + ", sodium=" + sodium + ", fat=" + fat + ", cholesterol=" + cholesterol + ", carbs=" + carbs + '}';
+    }
 }

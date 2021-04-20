@@ -23,7 +23,7 @@ public class MealPlanner {
         Container mainContainer = mainFrame.getContentPane();
         mainContainer.setBackground(Color.WHITE);
         mainContainer.setLayout(null);
-        
+
         TabbedViewController tabbedViewController = new TabbedViewController();
 
         mainContainer.add(tabbedViewController);

@@ -1,8 +1,12 @@
 // This project has no license.
 package mealplanner.models;
 
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Predicate;
+import mealplanner.DatabaseManager;
+import oracle.jdbc.OraclePreparedStatement;
 
 /**
  * @date 16-04-2021
@@ -19,11 +23,22 @@ public class MealPlanModel {
     private void fetchMealPlans() {
         mealPlans = new HashMap<>();
 
-        // TODO: Fetch data from database
-    }
+        String statement = "SELECT * FROM mealPlan, recipeMealPlan, recipe WHERE mealPlan.id = recipeMealPlan.mealPlanID AND recipeMealPlan.recipeID = recipe.id";
+        DatabaseManager.getData(statement, (resultSet) -> {
+            try {
+                int mealPlanId = resultSet.getInt("mealPlanID");
+                MealPlan.Type type = MealPlan.Type.values()[resultSet.getInt("type")];
+                Date date = resultSet.getDate("mealDate");
+                Recipe recipe = DatabaseManager.getRecipe(resultSet, "recipeID");
 
-    private void updateMealPlans() {
-        // TODO: Update database with data from model
+                if (recipe != null) {
+                    MealPlan mealPlan = new MealPlan(mealPlanId, type, date, recipe);
+                    mealPlans.put(mealPlanId, mealPlan);
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        });
     }
 
     public HashMap<Integer, MealPlan> getMealPlans() {
@@ -43,14 +58,104 @@ public class MealPlanModel {
     }
 
     public void addMealPlan(MealPlan mealPlan) {
-        mealPlans.put(mealPlan.getId(), mealPlan);
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "INSERT INTO mealPlan VALUES (?, ?, ?)";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, mealPlan.getId());
+                preparedStatement.setInt(2, mealPlan.getType().ordinal());
+                preparedStatement.setDate(3, new java.sql.Date(mealPlan.getDate().getTime()));
 
-        updateMealPlans();
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "INSERT INTO recipeMealPlan VALUES (?, ?)";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, mealPlan.getRecipe().getId());
+                preparedStatement.setInt(2, mealPlan.getId());
+
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        fetchMealPlans();
     }
 
     public void removeMealPlan(int id) {
-        mealPlans.remove(id);
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "DELETE FROM recipeMealPlan WHERE mealPlanID = ?";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, id);
 
-        updateMealPlans();
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "DELETE FROM mealPlan WHERE ID = ?";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, id);
+
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        fetchMealPlans();
+    }
+
+    public void updateMealPlan(int id, MealPlan mealPlan) {
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "UPDATE mealPlan SET type = ?, mealDate = ? WHERE ID = ?";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, mealPlan.getType().ordinal());
+                preparedStatement.setDate(2, new java.sql.Date(mealPlan.getDate().getTime()));
+                preparedStatement.setInt(3, id);
+
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "UPDATE recipeMealPlan SET recipeID = ? WHERE mealPlanID = ?";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, mealPlan.getRecipe().getId());
+                preparedStatement.setInt(2, id);
+
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        fetchMealPlans();
     }
 }

@@ -1,8 +1,11 @@
 // This project has no license.
 package mealplanner.models;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.function.Predicate;
+import mealplanner.DatabaseManager;
+import oracle.jdbc.OraclePreparedStatement;
 
 /**
  * @date 16-04-2021
@@ -19,17 +22,20 @@ public class FoodModel {
     private void fetchFoods() {
         foods = new HashMap<>();
 
-        // TODO: Fetch data from database
-    }
+        String statement = "SELECT * FROM food";
+        DatabaseManager.getData(statement, (resultSet) -> {
+            Food food = DatabaseManager.getFood(resultSet, "ID");
 
-    private void updateFoods() {
-        // TODO: Update database with data from model
+            if (food != null) {
+                foods.put(food.getId(), food);
+            }
+        });
     }
 
     public HashMap<Integer, Food> getFoods() {
         return foods;
     }
-    
+
     public HashMap<Integer, Food> getFoods(Predicate<Food> predicate) {
         HashMap<Integer, Food> dictionary = new HashMap<>();
         foods.entrySet().forEach(entry -> {
@@ -43,20 +49,74 @@ public class FoodModel {
     }
 
     public void addFood(Food food) {
-        foods.put(food.getId(), food);
-        
-        updateFoods();
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "INSERT INTO food VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, food.getId());
+                preparedStatement.setString(2, food.getName());
+                preparedStatement.setInt(3, food.getGroup().ordinal());
+                preparedStatement.setInt(4, food.getCalories());
+                preparedStatement.setInt(5, food.getSugar());
+                preparedStatement.setInt(6, food.getProtein());
+                preparedStatement.setInt(7, food.getSodium());
+                preparedStatement.setInt(8, food.getFat());
+                preparedStatement.setInt(9, food.getCholesterol());
+                preparedStatement.setInt(10, food.getCarbs());
+
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        fetchFoods();
     }
 
     public void removeFood(int id) {
-        foods.remove(id);
-        
-        updateFoods();
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "DELETE FROM food WHERE ID = ?";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, id);
+
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        fetchFoods();
     }
 
     public void updateFood(int id, Food food) {
-        foods.put(id, food);
-        
-        updateFoods();
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "UPDATE food SET name = ?, foodGroup = ?, calories = ?, sugar = ?, protein = ?, sodium = ?, fat = ?, cholesterol = ?, carbs = ? WHERE ID = ?";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setString(1, food.getName());
+                preparedStatement.setInt(2, food.getGroup().ordinal());
+                preparedStatement.setInt(3, food.getCalories());
+                preparedStatement.setInt(4, food.getSugar());
+                preparedStatement.setInt(5, food.getProtein());
+                preparedStatement.setInt(6, food.getSodium());
+                preparedStatement.setInt(7, food.getFat());
+                preparedStatement.setInt(8, food.getCholesterol());
+                preparedStatement.setInt(9, food.getCarbs());
+                preparedStatement.setInt(10, id);
+
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        fetchFoods();
     }
 }

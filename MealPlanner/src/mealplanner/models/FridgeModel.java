@@ -1,8 +1,11 @@
 // This project has no license.
 package mealplanner.models;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.function.Predicate;
+import mealplanner.DatabaseManager;
+import oracle.jdbc.OraclePreparedStatement;
 
 /**
  * @date 16-04-2021
@@ -10,6 +13,7 @@ import java.util.function.Predicate;
  */
 public class FridgeModel {
 
+    private static final int FRIDGE_ID = 0;
     private Fridge fridge;
 
     public FridgeModel() {
@@ -17,13 +21,22 @@ public class FridgeModel {
     }
 
     private void fetchFridge() {
-        fridge = new Fridge();
+        HashMap<Food, Integer> foods = new HashMap<>();
+        String statement = "SELECT * FROM fridgeFood, food WHERE fridgeFood.foodID = food.ID";
+        DatabaseManager.getData(statement, (resultSet) -> {
+            try {
+                int quantity = resultSet.getInt("quantity");
+                Food food = DatabaseManager.getFood(resultSet, "foodID");
 
-        // TODO: Fetch data from database
-    }
+                if (food != null) {
+                    foods.put(food, quantity);
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        });
 
-    private void updateFridge() {
-        // TODO: Update database with data from model
+        fridge = new Fridge(foods);
     }
 
     public Fridge getFridge() {
@@ -43,19 +56,62 @@ public class FridgeModel {
         return new Fridge(dictionary);
     }
 
-    public void addFood(Food food, int quantity) {
-        HashMap<Food, Integer> foods = fridge.getFoods();
-        foods.put(food, quantity);
-        fridge.setFoods(foods);
+    public void addFood(int foodId, int quantity) {
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "INSERT INTO fridgeFood VALUES (?, ?, ?)";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, FRIDGE_ID);
+                preparedStatement.setInt(2, foodId);
+                preparedStatement.setInt(3, quantity);
 
-        updateFridge();
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        fetchFridge();
     }
 
-    public void removeFood(Food food, int quantity) {
-        HashMap<Food, Integer> foods = fridge.getFoods();
-        foods.remove(food);
-        fridge.setFoods(foods);
+    public void removeFood(int foodId) {
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "DELETE FROM fridgeFood WHERE fridgeID = ? AND foodID = ?";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, FRIDGE_ID);
+                preparedStatement.setInt(2, foodId);
 
-        updateFridge();
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        fetchFridge();
+    }
+
+    public void updateFoodQuantity(int foodId, int quantity) {
+        DatabaseManager.updateData((connection) -> {
+            try {
+                String statement = "UPDATE fridgeFood SET quantity = ? WHERE fridgeID = ? AND foodID = ?";
+                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                preparedStatement.setInt(1, quantity);
+                preparedStatement.setInt(2, FRIDGE_ID);
+                preparedStatement.setInt(3, foodId);
+
+                return preparedStatement;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+            return null;
+        });
+
+        fetchFridge();
     }
 }

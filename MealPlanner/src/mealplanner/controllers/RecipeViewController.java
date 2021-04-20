@@ -13,9 +13,11 @@ import mealplanner.models.*;
 public class RecipeViewController extends JPanel {
 
     private final RecipeModel recipeModel;
+    private final FoodModel foodModel;
 
     public RecipeViewController() {
         this.recipeModel = new RecipeModel();
+        this.foodModel = new FoodModel();
 
         setupPanel();
     }

@@ -1,25 +1,28 @@
 // This project has no license.
 package mealplanner.models;
 
+import java.util.HashMap;
+
 /**
  * @date 16-04-2021
  * @author johnholtzworth
  */
 public class Recipe {
+
     public enum Category {
         DESSERT,
         SNACK,
         APPETIZER,
         ENTREE
     }
-    
+
     private int id;
     private String name;
     private String instructions;
     private Category category;
-    private Food[] foods;
+    private HashMap<Food, Integer> foods;
 
-    public Recipe(int id, String name, String instructions, Category category, Food[] foods) {
+    public Recipe(int id, String name, String instructions, Category category, HashMap<Food, Integer> foods) {
         this.id = id;
         this.name = name;
         this.instructions = instructions;
@@ -59,11 +62,16 @@ public class Recipe {
         this.category = category;
     }
 
-    public Food[] getFoods() {
+    public HashMap<Food, Integer> getFoods() {
         return foods;
     }
 
-    public void setFoods(Food[] foods) {
+    public void setFoods(HashMap<Food, Integer> foods) {
         this.foods = foods;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" + "id=" + id + ", name=" + name + ", instructions=" + instructions + ", category=" + category + ", foods=" + foods + '}';
     }
 }
