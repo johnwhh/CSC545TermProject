@@ -1,6 +1,7 @@
 // This project has no license.
 package mealplanner.controllers;
 
+import mealplanner.views.RecipeListView;
 import java.awt.Color;
 import javax.swing.JPanel;
 import mealplanner.MealPlanner;
@@ -29,5 +30,12 @@ public class RecipeViewController extends JPanel {
                 MealPlanner.FRAME_WIDTH - (TabbedViewController.PADDING * 2),
                 MealPlanner.FRAME_HEIGHT - (TabbedViewController.PADDING));
         setBackground(Color.WHITE);
+        
+        RecipeListView recipeListView = new RecipeListView();
+        recipeListView.setBackground(Color.LIGHT_GRAY);
+        recipeListView.setBounds(this.getBounds());
+        add(recipeListView);
+        recipeListView.setVisible(true);
+        
     }
 }

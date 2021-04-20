@@ -68,6 +68,8 @@ CREATE TABLE recipeFood (
 
 INSERT INTO fridge VALUES (0);
 
+
+
 -- Here are various statements for debugging:
 
 --INSERT INTO fridgeFood VALUES (0, 0, 4);
