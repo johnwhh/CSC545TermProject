@@ -8,11 +8,11 @@ package mealplanner.models;
 public class Food {
 
     public enum Group {
-        FRUITS,
-        VEGETABLES,
-        GRAINS,
-        PROTEINS,
-        DAIRY
+        FRUITS,         // 0
+        VEGETABLES,     // 1
+        GRAINS,         // 2
+        PROTEINS,       // 3
+        DAIRY           // 4
     }
 
     private int id;

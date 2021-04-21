@@ -10,10 +10,10 @@ import java.util.HashMap;
 public class Recipe {
 
     public enum Category {
-        DESSERT,
-        SNACK,
-        APPETIZER,
-        ENTREE
+        DESSERT,            // 0
+        SNACK,              // 1
+        APPETIZER,          // 2
+        ENTREE              // 3
     }
 
     private int id;

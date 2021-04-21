@@ -1,19 +1,21 @@
 // This project has no license.
 package mealplanner.views;
 
+import java.awt.Color;
+import javax.swing.DefaultListModel;
+import mealplanner.controllers.RecipeViewController;
 /**
  *
  * @author Matthew
  */
-public class RecipeListView extends javax.swing.JPanel {
-
+public class RecipeListView extends javax.swing.JPanel  {
+    public String[] recipeListName;
+    public String selectedItem = "";
     /**
      * Creates new form RecipeListView
      */
     public RecipeListView() {
         initComponents();
-        
-        
     }
 
     /**
@@ -27,6 +29,7 @@ public class RecipeListView extends javax.swing.JPanel {
 
         RecipeListScroll = new javax.swing.JScrollPane();
         RecipeList = new javax.swing.JList<>();
+        selectButton = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(460, 680));
         setMinimumSize(new java.awt.Dimension(460, 680));
@@ -38,27 +41,64 @@ public class RecipeListView extends javax.swing.JPanel {
         });
         RecipeListScroll.setViewportView(RecipeList);
 
+        selectButton.setText("Select");
+        selectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(RecipeListScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                .addComponent(RecipeListScroll)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(187, 187, 187)
+                .addComponent(selectButton)
+                .addContainerGap(212, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(RecipeListScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(457, Short.MAX_VALUE))
+                .addComponent(RecipeListScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 539, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(selectButton)
+                .addContainerGap(89, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
+        selectedItem = RecipeList.getSelectedValue();
+        showSelectedItem(selectedItem);
+    }//GEN-LAST:event_selectButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> RecipeList;
     private javax.swing.JScrollPane RecipeListScroll;
+    private javax.swing.JButton selectButton;
     // End of variables declaration//GEN-END:variables
+
+    public void setRecipeNames(String[] tempList){
+        recipeListName = tempList;
+        updateList();
+    }
+    
+    private void updateList(){
+        DefaultListModel newModel = new DefaultListModel();
+        for (int i = 0; i < recipeListName.length; i++) {
+            newModel.addElement( recipeListName[i] );
+        }
+        newModel.addElement("Add a new recipe.");
+        RecipeList.setModel(newModel);
+    }
+    
+    public void showSelectedItem(String selectedItemTemp){
+        RecipeViewController.showSelectedItem(selectedItemTemp);
+    }
 }

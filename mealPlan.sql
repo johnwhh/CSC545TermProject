@@ -68,7 +68,9 @@ CREATE TABLE recipeFood (
 
 INSERT INTO fridge VALUES (0);
 
-
+INSERT INTO food VALUES (0, 'Sour Patch Kids', 4, 110, 24, 0, 25, 0, 0, 27);
+INSERT INTO recipe VALUES (0, 'Biig Sour Patch Kids', 'Smush up a bunch of Sour Patch Kids', 1);
+INSERT INTO recipefood VALUES (0, 0, 12);
 
 -- Here are various statements for debugging:
 

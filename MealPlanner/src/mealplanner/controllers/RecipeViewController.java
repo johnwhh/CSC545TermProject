@@ -2,7 +2,10 @@
 package mealplanner.controllers;
 
 import mealplanner.views.RecipeListView;
+import mealplanner.views.RecipeInformationView;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JPanel;
 import mealplanner.MealPlanner;
 import mealplanner.models.*;
@@ -22,6 +25,9 @@ public class RecipeViewController extends JPanel {
 
         setupPanel();
     }
+    
+    static RecipeInformationView recipeInformationView = new RecipeInformationView();
+    static RecipeListView recipeListView = new RecipeListView();
 
     private void setupPanel() {
         setLayout(null);
@@ -31,11 +37,41 @@ public class RecipeViewController extends JPanel {
                 MealPlanner.FRAME_HEIGHT - (TabbedViewController.PADDING));
         setBackground(Color.WHITE);
         
-        RecipeListView recipeListView = new RecipeListView();
         recipeListView.setBackground(Color.LIGHT_GRAY);
         recipeListView.setBounds(this.getBounds());
         add(recipeListView);
         recipeListView.setVisible(true);
+        recipeListView.setRecipeNames(getRecipeNames());
+        
+        recipeInformationView.setBackground(Color.LIGHT_GRAY);
+        recipeInformationView.setBounds(this.getBounds());
+        add(recipeInformationView);
+        
+    }
+    
+    private String[] getRecipeNames() {
+        var recipes = recipeModel.getRecipes();
+        List<String> recipeNameList = new ArrayList<>();
+        
+        recipes.forEach((id, recipe) -> {
+            recipeNameList.add(recipe.getName());
+        });
+        
+        String[] recipeNames = new String[recipeNameList.size()];
+        recipeNameList.toArray(recipeNames);
+        return recipeNames;
+    }
+    
+    private String getRecipeCategory(String selectedItem) {
+        var recipes = recipeModel.getRecipes();
+        String recipeInstructions = "";
+        
+        
+    }
+    
+    public static void showSelectedItem(String selectedItem){
+        recipeListView.setVisible(false);
+        recipeInformationView.setVisible(true);
         
     }
 }
