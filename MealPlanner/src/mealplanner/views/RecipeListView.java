@@ -1,9 +1,7 @@
 // This project has no license.
 package mealplanner.views;
 
-import java.awt.Color;
 import javax.swing.DefaultListModel;
-import mealplanner.controllers.RecipeViewController;
 /**
  *
  * @author Matthew
@@ -14,6 +12,7 @@ public class RecipeListView extends javax.swing.JPanel  {
     /**
      * Creates new form RecipeListView
      */
+    
     public RecipeListView() {
         initComponents();
     }
@@ -74,9 +73,7 @@ public class RecipeListView extends javax.swing.JPanel  {
 
     private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
         selectedItem = RecipeList.getSelectedValue();
-        showSelectedItem(selectedItem);
     }//GEN-LAST:event_selectButtonActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> RecipeList;
@@ -96,9 +93,5 @@ public class RecipeListView extends javax.swing.JPanel  {
         }
         newModel.addElement("Add a new recipe.");
         RecipeList.setModel(newModel);
-    }
-    
-    public void showSelectedItem(String selectedItemTemp){
-        RecipeViewController.showSelectedItem(selectedItemTemp);
     }
 }

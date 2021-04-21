@@ -6,12 +6,20 @@ package mealplanner.views;
  * @author Matthew
  */
 public class RecipeInformationView extends javax.swing.JPanel {
-
+    
+    static String recipeName = "";
+    static String recipeCategory = "";
+    static String recipeInstructions = "";
+    
     /**
      * Creates new form RecipeInformationView
      */
     public RecipeInformationView() {
         initComponents();
+        recipeCategoryDropdown.add("Dessert");
+        recipeCategoryDropdown.add("Snack");
+        recipeCategoryDropdown.add("Appetizer");
+        recipeCategoryDropdown.add("Entree");
     }
 
     /**
@@ -33,7 +41,7 @@ public class RecipeInformationView extends javax.swing.JPanel {
         ingredientsLabel = new javax.swing.JLabel();
         ingredientsScroll = new javax.swing.JScrollPane();
         ingredientsList = new javax.swing.JList<>();
-        recipeCategory = new java.awt.Choice();
+        recipeCategoryDropdown = new java.awt.Choice();
 
         setMaximumSize(new java.awt.Dimension(460, 680));
         setMinimumSize(new java.awt.Dimension(460, 680));
@@ -80,7 +88,7 @@ public class RecipeInformationView extends javax.swing.JPanel {
                     .addComponent(recipeInstructionScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
                     .addComponent(recipeNameScroll)
                     .addComponent(ingredientsScroll)
-                    .addComponent(recipeCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(recipeCategoryDropdown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -93,7 +101,7 @@ public class RecipeInformationView extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(recipeCategoryLabel)
-                    .addComponent(recipeCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(recipeCategoryDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(recipeInstructionLabel)
@@ -111,7 +119,7 @@ public class RecipeInformationView extends javax.swing.JPanel {
     private javax.swing.JLabel ingredientsLabel;
     private javax.swing.JList<String> ingredientsList;
     private javax.swing.JScrollPane ingredientsScroll;
-    private java.awt.Choice recipeCategory;
+    private java.awt.Choice recipeCategoryDropdown;
     private javax.swing.JLabel recipeCategoryLabel;
     private javax.swing.JLabel recipeInstructionLabel;
     private javax.swing.JScrollPane recipeInstructionScroll;
@@ -120,4 +128,16 @@ public class RecipeInformationView extends javax.swing.JPanel {
     private javax.swing.JScrollPane recipeNameScroll;
     private javax.swing.JTextArea recipeNameText;
     // End of variables declaration//GEN-END:variables
+
+   public void setRecipeData(String name, String category, String instructions){
+       recipeName = name;
+       recipeCategory = category;
+       recipeInstructions = instructions;
+   }
+   
+   public void displayRecipeData(){
+       recipeNameText.setText(recipeName);
+       recipeCategoryDropdown.select(recipeCategory);
+       recipeInstructionText.setText(recipeInstructions);
+   }
 }

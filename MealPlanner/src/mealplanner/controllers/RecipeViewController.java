@@ -2,19 +2,22 @@
 package mealplanner.controllers;
 
 import mealplanner.views.RecipeListView;
-import mealplanner.views.RecipeInformationView;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import mealplanner.MealPlanner;
 import mealplanner.models.*;
+import mealplanner.views.ListView;
+import mealplanner.views.ListViewDataSource;
+import mealplanner.views.ListViewDelegate;
+import mealplanner.views.RecipeInformationView;
 
 /**
  * @date 18-04-2021
  * @author johnholtzworth
  */
-public class RecipeViewController extends JPanel {
+public class RecipeViewController extends JPanel implements ListViewDelegate, ListViewDataSource {
 
     private final RecipeModel recipeModel;
     private final FoodModel foodModel;
@@ -26,8 +29,9 @@ public class RecipeViewController extends JPanel {
         setupPanel();
     }
     
-    static RecipeInformationView recipeInformationView = new RecipeInformationView();
-    static RecipeListView recipeListView = new RecipeListView();
+    private ListView listView;
+    private RecipeListView recipeListView = new RecipeListView();
+    private RecipeInformationView recipeInformationView = new RecipeInformationView();
 
     private void setupPanel() {
         setLayout(null);
@@ -37,16 +41,21 @@ public class RecipeViewController extends JPanel {
                 MealPlanner.FRAME_HEIGHT - (TabbedViewController.PADDING));
         setBackground(Color.WHITE);
         
-        recipeListView.setBackground(Color.LIGHT_GRAY);
-        recipeListView.setBounds(this.getBounds());
-        add(recipeListView);
-        recipeListView.setVisible(true);
-        recipeListView.setRecipeNames(getRecipeNames());
+        listView = new ListView("Your Recipes");
+        listView.delegate = this;
+        listView.dataSource = this;
+        add(listView);
         
-        recipeInformationView.setBackground(Color.LIGHT_GRAY);
-        recipeInformationView.setBounds(this.getBounds());
-        add(recipeInformationView);
-        
+//        recipeListView.setBackground(Color.LIGHT_GRAY);
+//        recipeListView.setBounds(this.getBounds());
+//        add(recipeListView);
+//        recipeListView.setVisible(true);
+//        recipeListView.setRecipeNames(getRecipeNames());
+//        
+//        recipeInformationView.setBackground(Color.LIGHT_GRAY);
+//        recipeInformationView.setBounds(this.getBounds());
+//        add(recipeInformationView);
+//        recipeInformationView.setVisible(false);
     }
     
     private String[] getRecipeNames() {
@@ -61,17 +70,20 @@ public class RecipeViewController extends JPanel {
         recipeNameList.toArray(recipeNames);
         return recipeNames;
     }
-    
-    private String getRecipeCategory(String selectedItem) {
-        var recipes = recipeModel.getRecipes();
-        String recipeInstructions = "";
-        
-        
+
+    @Override
+    public void didSelectRow(ListView listView, int row) {
+        System.out.println("Selected row " + row);
+    }
+
+    @Override
+    public int numberOfRows(ListView listView) {
+        return 3;
+    }
+
+    @Override
+    public String contentsOfRow(ListView listView, int row) {
+        return "Popcorn " + row;
     }
     
-    public static void showSelectedItem(String selectedItem){
-        recipeListView.setVisible(false);
-        recipeInformationView.setVisible(true);
-        
-    }
 }

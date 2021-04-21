@@ -39,7 +39,7 @@
                   <Component id="recipeInstructionScroll" pref="326" max="32767" attributes="0"/>
                   <Component id="recipeNameScroll" max="32767" attributes="0"/>
                   <Component id="ingredientsScroll" max="32767" attributes="0"/>
-                  <Component id="recipeCategory" alignment="0" max="32767" attributes="0"/>
+                  <Component id="recipeCategoryDropdown" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -56,7 +56,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="recipeCategoryLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="recipeCategory" min="-2" max="-2" attributes="0"/>
+                  <Component id="recipeCategoryDropdown" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -151,7 +151,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="java.awt.Choice" name="recipeCategory">
+    <Component class="java.awt.Choice" name="recipeCategoryDropdown">
     </Component>
   </SubComponents>
 </Form>
