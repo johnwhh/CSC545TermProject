@@ -22,7 +22,7 @@ public class MealPlanModel {
 
     private void fetchMealPlans() {
         mealPlans = new HashMap<>();
-
+        
         String statement = "SELECT * FROM mealPlan, recipeMealPlan, recipe WHERE mealPlan.id = recipeMealPlan.mealPlanID AND recipeMealPlan.recipeID = recipe.id";
         DatabaseManager.getData(statement, (resultSet) -> {
             try {

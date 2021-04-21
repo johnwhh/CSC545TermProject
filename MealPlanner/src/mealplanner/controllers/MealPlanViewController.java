@@ -2,9 +2,11 @@
 package mealplanner.controllers;
 
 import java.awt.Color;
+import java.util.HashMap;
 import javax.swing.JPanel;
 import mealplanner.MealPlanner;
 import mealplanner.models.*;
+import mealplanner.views.MealPlanListView;
 
 /**
  * @date 18-04-2021
@@ -21,11 +23,17 @@ public class MealPlanViewController extends JPanel {
     }
 
     private void setupPanel() {
-        setLayout(null);
+        mealPlanModel.getMealPlans();
+        MealPlanListView mealPlanListView = new MealPlanListView();
+        mealPlanListView.setBounds(this.getBounds());
+        add(mealPlanListView);
+        mealPlanListView.setVisible(true);
+
+        
         setBounds(0,
                 0,
                 MealPlanner.FRAME_WIDTH - (TabbedViewController.PADDING * 2),
                 MealPlanner.FRAME_HEIGHT - (TabbedViewController.PADDING));
-        setBackground(Color.WHITE);
+        setBackground(Color.gray);
     }
 }
