@@ -21,7 +21,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
 
     private final RecipeModel recipeModel;
     private final FoodModel foodModel;
-
+    
     public RecipeViewController() {
         this.recipeModel = new RecipeModel();
         this.foodModel = new FoodModel();
@@ -29,9 +29,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         setupPanel();
     }
     
-    private ListView listView;
-    private RecipeListView recipeListView = new RecipeListView();
-    private RecipeInformationView recipeInformationView = new RecipeInformationView();
+    private ListView recipelistView;
 
     private void setupPanel() {
         setLayout(null);
@@ -41,21 +39,11 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 MealPlanner.FRAME_HEIGHT - (TabbedViewController.PADDING));
         setBackground(Color.WHITE);
         
-        listView = new ListView("Your Recipes");
-        listView.delegate = this;
-        listView.dataSource = this;
-        add(listView);
-        
-//        recipeListView.setBackground(Color.LIGHT_GRAY);
-//        recipeListView.setBounds(this.getBounds());
-//        add(recipeListView);
-//        recipeListView.setVisible(true);
-//        recipeListView.setRecipeNames(getRecipeNames());
-//        
-//        recipeInformationView.setBackground(Color.LIGHT_GRAY);
-//        recipeInformationView.setBounds(this.getBounds());
-//        add(recipeInformationView);
-//        recipeInformationView.setVisible(false);
+        recipelistView = new ListView("Your Recipes");
+        recipelistView.delegate = this;
+        recipelistView.dataSource = this;
+        recipelistView.setBounds(this.getBounds());
+        add(recipelistView);
     }
     
     private String[] getRecipeNames() {
@@ -75,15 +63,18 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     public void didSelectRow(ListView listView, int row) {
         System.out.println("Selected row " + row);
     }
-
+    
+    
     @Override
     public int numberOfRows(ListView listView) {
-        return 3;
+        String[] recipeNames = getRecipeNames();
+        return recipeNames.length;
     }
 
     @Override
     public String contentsOfRow(ListView listView, int row) {
-        return "Popcorn " + row;
+        String[] recipeNames = getRecipeNames();
+        return recipeNames[row] + row;
     }
     
 }
