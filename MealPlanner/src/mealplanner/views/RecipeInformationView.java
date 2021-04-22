@@ -38,21 +38,19 @@ public class RecipeInformationView extends javax.swing.JPanel {
         recipeInstructionText = new javax.swing.JTextArea();
         recipeNameScroll = new javax.swing.JScrollPane();
         recipeNameText = new javax.swing.JTextArea();
-        ingredientsLabel = new javax.swing.JLabel();
-        ingredientsScroll = new javax.swing.JScrollPane();
-        ingredientsList = new javax.swing.JList<>();
         recipeCategoryDropdown = new java.awt.Choice();
 
         setMaximumSize(new java.awt.Dimension(460, 680));
         setMinimumSize(new java.awt.Dimension(460, 680));
 
-        recipeNameLabel.setText("Recipe Name:");
+        recipeNameLabel.setText("Recipe Name");
 
-        recipeCategoryLabel.setText("Recipe Category:");
+        recipeCategoryLabel.setText("Recipe Category");
 
-        recipeInstructionLabel.setText("Recipe Instructions:");
+        recipeInstructionLabel.setText("Recipe Instructions");
 
         recipeInstructionText.setColumns(20);
+        recipeInstructionText.setLineWrap(true);
         recipeInstructionText.setRows(5);
         recipeInstructionText.setText("Instructions");
         recipeInstructionScroll.setViewportView(recipeInstructionText);
@@ -62,63 +60,53 @@ public class RecipeInformationView extends javax.swing.JPanel {
         recipeNameText.setText("Name");
         recipeNameScroll.setViewportView(recipeNameText);
 
-        ingredientsLabel.setText("Ingredients:");
-
-        ingredientsList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        ingredientsScroll.setViewportView(ingredientsList);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ingredientsLabel)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(recipeInstructionLabel)
-                        .addComponent(recipeNameLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(recipeCategoryLabel, javax.swing.GroupLayout.Alignment.TRAILING)))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(recipeInstructionScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                    .addComponent(recipeNameScroll)
-                    .addComponent(ingredientsScroll)
-                    .addComponent(recipeCategoryDropdown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(recipeInstructionScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                            .addComponent(recipeCategoryDropdown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(recipeNameScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(170, 170, 170)
+                                .addComponent(recipeCategoryLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(189, 189, 189)
+                        .addComponent(recipeNameLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(174, 174, 174)
+                .addComponent(recipeInstructionLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(recipeNameScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(recipeNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(recipeCategoryLabel)
-                    .addComponent(recipeCategoryDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(recipeInstructionLabel)
-                    .addComponent(recipeInstructionScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ingredientsLabel)
-                    .addComponent(ingredientsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(262, Short.MAX_VALUE))
+                .addGap(6, 6, 6)
+                .addComponent(recipeNameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(recipeNameScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(recipeCategoryLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(recipeCategoryDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(recipeInstructionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(recipeInstructionScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(383, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel ingredientsLabel;
-    private javax.swing.JList<String> ingredientsList;
-    private javax.swing.JScrollPane ingredientsScroll;
     private java.awt.Choice recipeCategoryDropdown;
     private javax.swing.JLabel recipeCategoryLabel;
     private javax.swing.JLabel recipeInstructionLabel;
@@ -133,6 +121,7 @@ public class RecipeInformationView extends javax.swing.JPanel {
        recipeName = name;
        recipeCategory = category;
        recipeInstructions = instructions;
+       displayRecipeData();
    }
    
    public void displayRecipeData(){

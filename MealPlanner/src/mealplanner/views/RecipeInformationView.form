@@ -24,51 +24,52 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="ingredientsLabel" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="recipeInstructionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="recipeNameLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="recipeCategoryLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="recipeInstructionScroll" alignment="1" pref="440" max="32767" attributes="0"/>
+                          <Component id="recipeCategoryDropdown" alignment="0" max="32767" attributes="0"/>
+                          <Component id="recipeNameScroll" pref="440" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="170" max="-2" attributes="0"/>
+                              <Component id="recipeCategoryLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="189" max="-2" attributes="0"/>
+                      <Component id="recipeNameLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="recipeInstructionScroll" pref="326" max="32767" attributes="0"/>
-                  <Component id="recipeNameScroll" max="32767" attributes="0"/>
-                  <Component id="ingredientsScroll" max="32767" attributes="0"/>
-                  <Component id="recipeCategoryDropdown" alignment="0" max="32767" attributes="0"/>
-              </Group>
               <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="174" max="-2" attributes="0"/>
+              <Component id="recipeInstructionLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+              <Component id="recipeNameLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="recipeNameScroll" pref="0" max="32767" attributes="0"/>
-                  <Component id="recipeNameLabel" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="recipeCategoryLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="recipeCategoryDropdown" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="recipeInstructionLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="recipeInstructionScroll" min="-2" pref="165" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="ingredientsLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="ingredientsScroll" min="-2" pref="159" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="262" max="32767" attributes="0"/>
+              <Component id="recipeNameScroll" min="-2" pref="21" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="recipeCategoryLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="recipeCategoryDropdown" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+              <Component id="recipeInstructionLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="recipeInstructionScroll" min="-2" pref="165" max="-2" attributes="0"/>
+              <EmptySpace pref="383" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -76,17 +77,17 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="recipeNameLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Recipe Name:"/>
+        <Property name="text" type="java.lang.String" value="Recipe Name"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="recipeCategoryLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Recipe Category:"/>
+        <Property name="text" type="java.lang.String" value="Recipe Category"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="recipeInstructionLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Recipe Instructions:"/>
+        <Property name="text" type="java.lang.String" value="Recipe Instructions"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="recipeInstructionScroll">
@@ -99,6 +100,7 @@
         <Component class="javax.swing.JTextArea" name="recipeInstructionText">
           <Properties>
             <Property name="columns" type="int" value="20"/>
+            <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
             <Property name="text" type="java.lang.String" value="Instructions"/>
           </Properties>
@@ -118,36 +120,6 @@
             <Property name="rows" type="int" value="5"/>
             <Property name="text" type="java.lang.String" value="Name"/>
           </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Component class="javax.swing.JLabel" name="ingredientsLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Ingredients:"/>
-      </Properties>
-    </Component>
-    <Container class="javax.swing.JScrollPane" name="ingredientsScroll">
-      <AuxValues>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="javax.swing.JList" name="ingredientsList">
-          <Properties>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
-              </StringArray>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
