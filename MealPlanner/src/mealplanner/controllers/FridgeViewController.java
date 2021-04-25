@@ -59,28 +59,28 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
         foodNames = new String[foodNameList.size()];
         foodNameList.toArray(foodNames);
     }
-    
-    private String[] getFoodNames() {
-        var foods = foodModel.getFoods();
-        List<String> foodNameList = new ArrayList<>();
-
-        foods.forEach((id, food) -> {
-            foodNameList.add(food.getName());
-        });
-
-        String[] foodNames = new String[foodNameList.size()];
-        foodNameList.toArray(foodNames);
-        return foodNames;
-    }
+//    
+//    private String[] getFoodNames() {
+//        var foods = foodModel.getFoods();
+//        List<String> foodNameList = new ArrayList<>();
+//
+//        foods.forEach((id, food) -> {
+//            foodNameList.add(food.getName());
+//        });
+//
+//        String[] foodNames = new String[foodNameList.size()];
+//        foodNameList.toArray(foodNames);
+//        return foodNames;
+//    }
 
     @Override
     public int numberOfRows(ListView listView) {
-        return getFoodNames().length;
+        return foodNames.length;
     }
 
     @Override
     public String contentsOfRow(ListView listView, int row) {
-        return getFoodNames()[row];
+        return foodNames[row];
     }
 
     @Override

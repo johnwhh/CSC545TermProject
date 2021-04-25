@@ -22,7 +22,7 @@ public class MealPlanModel {
 
     private void fetchMealPlans() {
         mealPlans = new HashMap<>();
-        
+
         String statement = "SELECT * FROM mealPlan, recipeMealPlan, recipe WHERE mealPlan.id = recipeMealPlan.mealPlanID AND recipeMealPlan.recipeID = recipe.id";
         DatabaseManager.getData(statement, (resultSet) -> {
             try {
@@ -45,7 +45,7 @@ public class MealPlanModel {
         return mealPlans;
     }
 
-    public HashMap<Integer, MealPlan> getFoods(Predicate<MealPlan> predicate) {
+    public HashMap<Integer, MealPlan> getMealPlans(Predicate<MealPlan> predicate) {
         HashMap<Integer, MealPlan> dictionary = new HashMap<>();
         mealPlans.entrySet().forEach(entry -> {
             Integer id = entry.getKey();

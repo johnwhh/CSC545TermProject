@@ -41,9 +41,9 @@ CREATE TABLE recipeMealPlan (
     recipeID NUMBER(3),
     mealPlanID NUMBER(3),
     CONSTRAINT fkMRecipe FOREIGN KEY (recipeID) REFERENCES recipe(ID)
-    ON DELETE SET NULL,
+    ON DELETE CASCADE,
     CONSTRAINT fkRMealPlan FOREIGN KEY (mealPlanID) REFERENCES mealPlan(ID)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
 );
 
 CREATE TABLE fridgeFood (
@@ -51,9 +51,9 @@ CREATE TABLE fridgeFood (
     foodID NUMBER(3),
     quantity NUMBER(3),
     CONSTRAINT fkFFridge FOREIGN KEY (fridgeID) REFERENCES fridge(ID)
-    ON DELETE SET NULL,
+    ON DELETE CASCADE,
     CONSTRAINT fkFFood FOREIGN KEY (foodID) REFERENCES food(ID)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
 );
 
 CREATE TABLE recipeFood (
@@ -61,9 +61,9 @@ CREATE TABLE recipeFood (
     foodID NUMBER(3),
     quantity NUMBER(3),
     CONSTRAINT fkFRecipe FOREIGN KEY (recipeID) REFERENCES recipe(ID)
-    ON DELETE SET NULL,
+    ON DELETE CASCADE,
     CONSTRAINT fkRFood FOREIGN KEY (foodID) REFERENCES food(ID)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
 );
 
 INSERT INTO fridge VALUES (0);
@@ -75,12 +75,30 @@ INSERT INTO fridge VALUES (0);
 --
 INSERT INTO food VALUES (0, 'Amazing Food', 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT INTO food VALUES (1, 'Yummy Food', 0, 0, 0, 0, 0, 0, 0, 0);
---
---INSERT INTO mealPlan VALUES (0, 0, CURRENT_DATE);
---INSERT INTO recipe VALUES (0, 'RecipeName', '1. Open box', 0);
---INSERT INTO recipeFood VALUES (0, 0, 2);
---INSERT INTO recipeFood VALUES (0, 1, 5);
---INSERT INTO recipeMealPlan VALUES (0, 0);
+INSERT INTO recipe VALUES (0, 'RecipeName', '1. Open box', 0);--id, recipename, instructions, category
+INSERT INTO recipe VALUES (1, 'Recipe2Name', '1. Open box', 0);--id, recipename, instructions, category
+INSERT INTO recipeFood VALUES (0, 0, 2);--rid, fid, quantity
+INSERT INTO recipeFood VALUES (1, 0, 2);
+INSERT INTO recipeFood VALUES (0, 1, 5);
+
+INSERT INTO mealPlan VALUES (0, 0, CURRENT_DATE);--id,type,date
+INSERT INTO mealPlan VALUES (1, 0, TO_DATE('2021-04-21','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (2, 1, TO_DATE('2021-04-21','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (3, 2, TO_DATE('2021-04-21','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (4, 0, TO_DATE('2021-04-22','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (5, 1, TO_DATE('2021-04-22','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (6, 2, TO_DATE('2021-04-22','YYYY-MM-DD'));
+INSERT INTO recipeMealPlan VALUES (0, 0);--rid, mid
+INSERT INTO recipeMealPlan VALUES (1, 1);
+INSERT INTO recipeMealPlan VALUES (0, 1);
+INSERT INTO recipeMealPlan VALUES (0, 2);
+INSERT INTO recipeMealPlan VALUES (0, 3);
+INSERT INTO recipeMealPlan VALUES (0, 4);
+INSERT INTO recipeMealPlan VALUES (0, 5);
+INSERT INTO recipeMealPlan VALUES (0, 6);
+SELECT * FROM mealPlan;
+SELECT * FROM recipe;
+SELECT * FROM recipeMealPlan;
 
 --SELECT * FROM mealPlan, recipeMealPlan, recipe
 --WHERE mealPlan.ID = recipeMealPlan.mealPlanID 
@@ -91,6 +109,7 @@ INSERT INTO food VALUES (1, 'Yummy Food', 0, 0, 0, 0, 0, 0, 0, 0);
 --SELECT * FROM fridgeFood, food WHERE fridgeFood.foodID = food.ID;
 --
 SELECT * FROM food;
+
 --
 --DELETE FROM food WHERE ID = 999;
 --
