@@ -69,7 +69,8 @@ CREATE TABLE recipeFood (
 INSERT INTO fridge VALUES (0);
 
 -- Here are various statements for debugging:
-
+--SELECT * FROM mealPlan;
+--SELECT * FROM recipe, recipeMealPlan WHERE recipe.ID = recipeMealPlan.recipeID AND recipeMealPlan.mealPlanID =  999;
 --INSERT INTO fridgeFood VALUES (0, 0, 4);
 --INSERT INTO fridgeFood VALUES (0, 1, 3);
 --

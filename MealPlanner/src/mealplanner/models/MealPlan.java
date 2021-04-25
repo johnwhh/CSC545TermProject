@@ -2,6 +2,7 @@
 package mealplanner.models;
 
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * @date 16-04-2021
@@ -23,13 +24,13 @@ public class MealPlan {
     private int id;
     private Type type;
     private Date date;
-    private Recipe recipe;
+    private HashMap<Integer, Recipe> recipes;
 
-    public MealPlan(int id, Type type, Date date, Recipe recipe) {
+    public MealPlan(int id, Type type, Date date, HashMap<Integer, Recipe> recipe) {
         this.id = id;
         this.type = type;
         this.date = date;
-        this.recipe = recipe;
+        this.recipes = recipe;
     }
 
     public int getId() {
@@ -56,16 +57,16 @@ public class MealPlan {
         this.date = date;
     }
 
-    public Recipe getRecipe() {
-        return recipe;
+    public HashMap<Integer, Recipe> getRecipes() {
+        return recipes;
     }
 
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
+    public void setRecipes(HashMap<Integer, Recipe> recipes) {
+        this.recipes = recipes;
     }
 
     @Override
     public String toString() {
-        return "MealPlan{" + "id=" + id + ", type=" + type + ", date=" + date + ", recipe=" + recipe + '}';
+        return "MealPlan{" + "id=" + id + ", type=" + type + ", date=" + date + ", recipe=" + recipes + '}';
     }
 }
