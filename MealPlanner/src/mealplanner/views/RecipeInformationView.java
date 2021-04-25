@@ -7,9 +7,9 @@ package mealplanner.views;
  */
 public class RecipeInformationView extends javax.swing.JPanel {
     
-    static String recipeName = "";
-    static String recipeCategory = "";
-    static String recipeInstructions = "";
+    private String recipeName = "";
+    private String recipeCategory = "";
+    private String recipeInstructions = "";
     
     /**
      * Creates new form RecipeInformationView
@@ -124,9 +124,21 @@ public class RecipeInformationView extends javax.swing.JPanel {
        displayRecipeData();
    }
    
-   public void displayRecipeData(){
+   private void displayRecipeData(){
        recipeNameText.setText(recipeName);
        recipeCategoryDropdown.select(recipeCategory);
        recipeInstructionText.setText(recipeInstructions);
+   }
+   
+   public String getRecipeName(){
+       return recipeNameText.getText();
+   }
+   
+   public String getRecipeCategory(){
+       return recipeCategoryDropdown.getSelectedItem();
+   }
+   
+   public String getRecipeInstructions(){
+       return recipeInstructionText.getText();
    }
 }
