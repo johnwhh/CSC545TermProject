@@ -82,12 +82,12 @@ INSERT INTO recipeFood VALUES (1, 0, 2);
 INSERT INTO recipeFood VALUES (0, 1, 5);
 
 INSERT INTO mealPlan VALUES (0, 0, CURRENT_DATE);--id,type,date
-INSERT INTO mealPlan VALUES (1, 0, TO_DATE('2021-04-21','YYYY-MM-DD'));
-INSERT INTO mealPlan VALUES (2, 1, TO_DATE('2021-04-21','YYYY-MM-DD'));
-INSERT INTO mealPlan VALUES (3, 2, TO_DATE('2021-04-21','YYYY-MM-DD'));
-INSERT INTO mealPlan VALUES (4, 0, TO_DATE('2021-04-22','YYYY-MM-DD'));
-INSERT INTO mealPlan VALUES (5, 1, TO_DATE('2021-04-22','YYYY-MM-DD'));
-INSERT INTO mealPlan VALUES (6, 2, TO_DATE('2021-04-22','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (1, 0, TO_DATE('2021-04-26','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (2, 1, TO_DATE('2021-04-26','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (3, 2, TO_DATE('2021-04-26','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (4, 0, TO_DATE('2021-04-27','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (5, 1, TO_DATE('2021-04-27','YYYY-MM-DD'));
+INSERT INTO mealPlan VALUES (6, 2, TO_DATE('2021-04-27','YYYY-MM-DD'));
 INSERT INTO recipeMealPlan VALUES (0, 0);--rid, mid
 INSERT INTO recipeMealPlan VALUES (1, 1);
 INSERT INTO recipeMealPlan VALUES (0, 1);
@@ -99,7 +99,8 @@ INSERT INTO recipeMealPlan VALUES (0, 6);
 SELECT * FROM mealPlan;
 SELECT * FROM recipe;
 SELECT * FROM recipeMealPlan;
-
+delete from mealPlan;
+delete from recipeMealPlan;
 --SELECT * FROM mealPlan, recipeMealPlan, recipe
 --WHERE mealPlan.ID = recipeMealPlan.mealPlanID 
 --AND recipeMealPlan.recipeID = recipe.ID;
