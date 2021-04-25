@@ -134,17 +134,41 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
         dinnerListView.setPreferredSize(new Dimension(145, 300));
         add(dinnerListView);
         
-        jButton1 = new javax.swing.JButton("Edit Breakfast");
-        jButton2 = new javax.swing.JButton("Edit Lunch");
-        jButton3 = new javax.swing.JButton("Edit Dinner");
+        jButton1 = new javax.swing.JButton("Add Breakfast");
+        jButton2 = new javax.swing.JButton("Add Lunch");
+        jButton3 = new javax.swing.JButton("Add Dinner");
         jButton1.setPreferredSize(new Dimension(145, 40));
         jButton2.setPreferredSize(new Dimension(145, 40));
         jButton3.setPreferredSize(new Dimension(145, 40));
         add(jButton1);
         add(jButton2);
         add(jButton3);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        
     }
-    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        System.out.println("button1");
+    } 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        System.out.println("button2");
+    } 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        System.out.println("button3");
+    } 
     
     
     public void comboBoxSelected(String date){
