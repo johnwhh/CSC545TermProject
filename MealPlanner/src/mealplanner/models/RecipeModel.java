@@ -66,12 +66,15 @@ public class RecipeModel {
             return null;
         });
 
-        recipe.getFoods().forEach((food, quantity) -> {
+        recipe.getFoods().forEach((id, foodQuantity) -> {
             DatabaseManager.updateData((connection) -> {
                 try {
                     String statement = "INSERT INTO recipeFood VALUES (?, ?, ?)";
                     OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
                     preparedStatement.setInt(1, recipe.getId());
+                    
+                    Food food = (Food) foodQuantity[0];
+                    int quantity = (int) foodQuantity[1];
                     preparedStatement.setInt(2, food.getId());
                     preparedStatement.setInt(3, quantity);
 
@@ -138,14 +141,15 @@ public class RecipeModel {
         });
 
         // Remove foods that are no longer in the recipe
-        recipes.get(id).getFoods().forEach((food, quantity) -> {
-            if (recipe.getFoods().containsKey(food) == false) {
+        recipes.get(id).getFoods().forEach((foodId, foodQuantity) -> {
+            if (recipe.getFoods().containsKey(foodId) == false) {
                 DatabaseManager.updateData((connection) -> {
                     try {
                         String statement = "DELETE FROM recipeFood WHERE recipeID = ? AND foodID = ?";
                         OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                        
                         preparedStatement.setInt(1, id);
-                        preparedStatement.setInt(2, food.getId());
+                        preparedStatement.setInt(2, foodId);
 
                         return preparedStatement;
                     } catch (SQLException e) {
@@ -158,14 +162,16 @@ public class RecipeModel {
         });
 
         // Add foods that were not in the recipe before
-        recipe.getFoods().forEach((food, quantity) -> {
-            if (recipes.get(id).getFoods().containsKey(food) == false) {
+        recipe.getFoods().forEach((foodId, foodQuantity) -> {
+            if (recipes.get(id).getFoods().containsKey(foodId) == false) {
                 DatabaseManager.updateData((connection) -> {
                     try {
                         String statement = "INSERT INTO recipeFood VALUES (?, ?, ?)";
                         OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
                         preparedStatement.setInt(1, recipe.getId());
-                        preparedStatement.setInt(2, food.getId());
+                        preparedStatement.setInt(2, foodId);
+                        
+                        int quantity = (int) foodQuantity[1];
                         preparedStatement.setInt(3, quantity);
 
                         return preparedStatement;
@@ -179,13 +185,15 @@ public class RecipeModel {
         });
 
         // Update quantities of foods in recipe
-        recipe.getFoods().forEach((food, quantity) -> {
+        recipe.getFoods().forEach((foodId, foodQuantity) -> {
             DatabaseManager.updateData((connection) -> {
                 try {
                     String statement = "UPDATE recipeFood SET (?, ?, ?)";
                     OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
                     preparedStatement.setInt(1, recipe.getId());
-                    preparedStatement.setInt(2, food.getId());
+                    preparedStatement.setInt(2, foodId);
+                    
+                    int quantity = (int) foodQuantity[1];
                     preparedStatement.setInt(3, quantity);
 
                     return preparedStatement;

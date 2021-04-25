@@ -47,15 +47,16 @@ public class FridgeTest {
 
         fridgeModel.addFood(ID, 2);
 
-        List<Food> foodList = new ArrayList<>(fridgeModel.getFridge().getFoods().keySet());
+        List<Integer> foodList = new ArrayList<>(fridgeModel.getFridge().getFoods().keySet());
         assertTrue("Food list size is greater than 0", foodList.size() > 0);
 
-        assertEquals(ID, foodList.get(0).getId());
+        assertEquals(ID, (int) foodList.get(0));
 
         fridgeModel.updateFoodQuantity(ID, 5);
-        List<Integer> values = new ArrayList<>(fridgeModel.getFridge().getFoods().values());
-        assertTrue("Quantity list size is greater than 0", values.size() > 0);
-        assertEquals(5, values.get(0).intValue());
+        assertTrue("Quantity list size is greater than 0", foodList.size() > 0);
+        Object[] quantities = new Object[foodList.size()];
+        quantities = fridgeModel.getFridge().getFoods().values().toArray(quantities);
+        assertEquals(5, (int) quantities[0]);
 
         fridgeModel.removeFood(ID);
         assertEquals(0, fridgeModel.getFridge().getFoods().size());
