@@ -69,17 +69,20 @@ CREATE TABLE recipeFood (
 INSERT INTO fridge VALUES (0);
 
 -- Here are various statements for debugging:
-
+--SELECT * FROM mealPlan;
+--SELECT * FROM recipe, recipeMealPlan WHERE recipe.ID = recipeMealPlan.recipeID AND recipeMealPlan.mealPlanID =  999;
 --INSERT INTO fridgeFood VALUES (0, 0, 4);
 --INSERT INTO fridgeFood VALUES (0, 1, 3);
 --
 INSERT INTO food VALUES (0, 'Amazing Food', 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO food VALUES (1, 'Yummy Food', 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO recipe VALUES (0, 'RecipeName', '1. Open box', 0);--id, recipename, instructions, category
-INSERT INTO recipe VALUES (1, 'Recipe2Name', '1. Open box', 0);--id, recipename, instructions, category
-INSERT INTO recipeFood VALUES (0, 0, 2);--rid, fid, quantity
-INSERT INTO recipeFood VALUES (1, 0, 2);
-INSERT INTO recipeFood VALUES (0, 1, 5);
+--INSERT INTO food VALUES (0, 'Amazing Food', 0, 0, 0, 0, 0, 0, 0, 0);
+--INSERT INTO food VALUES (1, 'Yummy Food', 0, 0, 0, 0, 0, 0, 0, 0);
+--
+--INSERT INTO mealPlan VALUES (0, 0, CURRENT_DATE);
+--INSERT INTO recipe VALUES (0, 'RecipeName', '1. Open box', 0);
+--INSERT INTO recipeFood VALUES (0, 0, 2);
+--INSERT INTO recipeFood VALUES (0, 1, 5);
+--INSERT INTO recipeMealPlan VALUES (0, 0);
 
 INSERT INTO mealPlan VALUES (0, 0, CURRENT_DATE);--id,type,date
 INSERT INTO mealPlan VALUES (1, 0, TO_DATE('2021-04-26','YYYY-MM-DD'));
@@ -109,8 +112,7 @@ delete from recipeMealPlan;
 --
 --SELECT * FROM fridgeFood, food WHERE fridgeFood.foodID = food.ID;
 --
-SELECT * FROM food;
-
+--SELECT * FROM food;
 --
 --DELETE FROM food WHERE ID = 999;
 --

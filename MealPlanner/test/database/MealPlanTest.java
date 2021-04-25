@@ -32,11 +32,14 @@ public class MealPlanTest {
         MealPlanModel mealPlanModel = new MealPlanModel();
         assertEquals(0, mealPlanModel.getMealPlans().size());
 
+        
         Recipe recipe = new Recipe(ID, "Mystery Recipe", "1. Clap hand", Recipe.Category.DESSERT, new HashMap<>());
         RecipeModel recipeModel = new RecipeModel();
         recipeModel.addRecipe(recipe);
 
-        MealPlan newMealPlan = new MealPlan(ID, MealPlan.Type.LUNCH, new Date(), recipe);
+        HashMap<Integer, Recipe> recipes = new HashMap<>();
+        recipes.put(ID, recipe);
+        MealPlan newMealPlan = new MealPlan(ID, MealPlan.Type.LUNCH, new Date(), recipes);
         mealPlanModel.addMealPlan(newMealPlan);
 
         assertEquals(1, mealPlanModel.getMealPlans().size());

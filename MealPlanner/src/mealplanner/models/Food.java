@@ -12,7 +12,12 @@ public class Food {
         VEGETABLES,
         GRAINS,
         PROTEINS,
-        DAIRY
+        DAIRY;
+        
+        @Override
+        public String toString() {
+            return name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
+        }
     }
 
     private int id;

@@ -4,6 +4,7 @@ package mealplanner.models;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 import mealplanner.DatabaseManager;
 import oracle.jdbc.OraclePreparedStatement;
@@ -23,18 +24,24 @@ public class MealPlanModel {
     private void fetchMealPlans() {
         mealPlans = new HashMap<>();
 
-        String statement = "SELECT * FROM mealPlan, recipeMealPlan, recipe WHERE mealPlan.id = recipeMealPlan.mealPlanID AND recipeMealPlan.recipeID = recipe.id";
+        String statement = "SELECT * FROM mealPlan";
         DatabaseManager.getData(statement, (resultSet) -> {
             try {
-                int mealPlanId = resultSet.getInt("mealPlanID");
+                int mealPlanId = resultSet.getInt("ID");
                 MealPlan.Type type = MealPlan.Type.values()[resultSet.getInt("type")];
                 Date date = resultSet.getDate("mealDate");
-                Recipe recipe = DatabaseManager.getRecipe(resultSet, "recipeID");
 
-                if (recipe != null) {
-                    MealPlan mealPlan = new MealPlan(mealPlanId, type, date, recipe);
-                    mealPlans.put(mealPlanId, mealPlan);
-                }
+                HashMap<Integer, Recipe> recipes = new HashMap<>();
+                String recipeStatement = "SELECT * FROM recipe, recipeMealPlan WHERE recipe.ID = recipeMealPlan.recipeID AND recipeMealPlan.mealPlanID = " + mealPlanId;
+                DatabaseManager.getData(recipeStatement, (resultSet2) -> {
+                    Recipe recipe = DatabaseManager.getRecipe(resultSet2, "recipeID");
+                    if (recipe != null) {
+                        recipes.put(recipe.getId(), recipe);
+                    }
+                });
+
+                MealPlan mealPlan = new MealPlan(mealPlanId, type, date, recipes);
+                mealPlans.put(mealPlanId, mealPlan);
             } catch (SQLException e) {
                 System.out.println(e);
             }
@@ -74,20 +81,22 @@ public class MealPlanModel {
             return null;
         });
 
-        DatabaseManager.updateData((connection) -> {
-            try {
-                String statement = "INSERT INTO recipeMealPlan VALUES (?, ?)";
-                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
-                preparedStatement.setInt(1, mealPlan.getRecipe().getId());
-                preparedStatement.setInt(2, mealPlan.getId());
+        for (Entry<Integer, Recipe> recipe : mealPlan.getRecipes().entrySet()) {
+            DatabaseManager.updateData((connection) -> {
+                try {
+                    String statement = "INSERT INTO recipeMealPlan VALUES (?, ?)";
+                    OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                    preparedStatement.setInt(1, recipe.getKey());
+                    preparedStatement.setInt(2, mealPlan.getId());
 
-                return preparedStatement;
-            } catch (SQLException e) {
-                System.out.println(e);
-            }
+                    return preparedStatement;
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
 
-            return null;
-        });
+                return null;
+            });
+        }
 
         fetchMealPlans();
     }
@@ -141,19 +150,62 @@ public class MealPlanModel {
             return null;
         });
 
-        DatabaseManager.updateData((connection) -> {
-            try {
-                String statement = "UPDATE recipeMealPlan SET recipeID = ? WHERE mealPlanID = ?";
-                OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
-                preparedStatement.setInt(1, mealPlan.getRecipe().getId());
-                preparedStatement.setInt(2, id);
+        // Remove recipes that are no longer in the meal plan
+        mealPlans.get(id).getRecipes().forEach((recipeId, recipe) -> {
+            if (mealPlan.getRecipes().containsKey(recipeId) == false) {
+                DatabaseManager.updateData((connection) -> {
+                    try {
+                        String statement = "DELETE FROM recipeMealPlan WHERE recipeID = ? WHERE mealPlanID = ?";
+                        OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                        preparedStatement.setInt(1, recipeId);
+                        preparedStatement.setInt(2, id);
 
-                return preparedStatement;
-            } catch (SQLException e) {
-                System.out.println(e);
+                        return preparedStatement;
+                    } catch (SQLException e) {
+                        System.out.println(e);
+                    }
+
+                    return null;
+                });
             }
+        });
 
-            return null;
+        // Add recipes that were not apart of the meal plan before
+        mealPlan.getRecipes().forEach((recipeId, recipe) -> {
+            if (mealPlans.get(id).getRecipes().containsKey(recipeId) == false) {
+                DatabaseManager.updateData((connection) -> {
+                    try {
+                        String statement = "INSERT INTO recipeMealPlan VALUES (?, ?)";
+                        OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                        preparedStatement.setInt(1, recipeId);
+                        preparedStatement.setInt(2, id);
+
+                        return preparedStatement;
+                    } catch (SQLException e) {
+                        System.out.println(e);
+                    }
+
+                    return null;
+                });
+            }
+        });
+
+        // Update recipes in meal pleans
+        mealPlan.getRecipes().forEach((recipeId, recipe) -> {
+            DatabaseManager.updateData((connection) -> {
+                try {
+                    String statement = "UPDATE recipeMealPlan SET recipeID = ? WHERE mealPlanID = ?";
+                    OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
+                    preparedStatement.setInt(1, recipeId);
+                    preparedStatement.setInt(2, id);
+
+                    return preparedStatement;
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+
+                return null;
+            });
         });
 
         fetchMealPlans();
