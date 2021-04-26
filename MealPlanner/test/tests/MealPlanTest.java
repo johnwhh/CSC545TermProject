@@ -1,5 +1,5 @@
 // This project has no license.
-package database;
+package tests;
 
 import java.util.Date;
 import java.util.HashMap;

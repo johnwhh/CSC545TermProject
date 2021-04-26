@@ -1,5 +1,5 @@
 // This project has no license.
-package database;
+package tests;
 
 import java.util.ArrayList;
 import java.util.List;
