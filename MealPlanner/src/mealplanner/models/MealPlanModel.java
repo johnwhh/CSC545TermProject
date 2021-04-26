@@ -52,7 +52,7 @@ public class MealPlanModel {
         return mealPlans;
     }
 
-    public HashMap<Integer, MealPlan> getFoods(Predicate<MealPlan> predicate) {
+    public HashMap<Integer, MealPlan> getMealPlans(Predicate<MealPlan> predicate) {
         HashMap<Integer, MealPlan> dictionary = new HashMap<>();
         mealPlans.entrySet().forEach(entry -> {
             Integer id = entry.getKey();
