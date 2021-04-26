@@ -1,7 +1,10 @@
 // This project has no license.
-package database;
+package tests;
 
+import java.util.ArrayList;
+import java.util.List;
 import static junit.framework.Assert.*;
+import mealplanner.DatabaseManager;
 import mealplanner.models.*;
 import org.junit.After;
 import org.junit.Before;
@@ -40,5 +43,16 @@ public class FoodTest {
 
         foodModel.removeFood(id);
         assertEquals(false, foodModel.getFoods().containsKey(id));
+    }
+    
+    @Test
+    public void testGetAvailableId() {
+        List<Integer> usedIds = new ArrayList<>();
+        usedIds.add(0);
+        usedIds.add(2);
+        
+        int id = DatabaseManager.getAvailableId(Food.class, usedIds);
+        
+        assertEquals(1, id);
     }
 }

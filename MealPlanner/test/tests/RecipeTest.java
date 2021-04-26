@@ -1,5 +1,5 @@
 // This project has no license.
-package database;
+package tests;
 
 import java.util.HashMap;
 import static junit.framework.Assert.*;
