@@ -79,7 +79,8 @@ INSERT INTO food VALUES (0, 'Amazing Food', 0, 0, 0, 0, 0, 0, 0, 0);
 --INSERT INTO food VALUES (1, 'Yummy Food', 0, 0, 0, 0, 0, 0, 0, 0);
 --
 --INSERT INTO mealPlan VALUES (0, 0, CURRENT_DATE);
---INSERT INTO recipe VALUES (0, 'RecipeName', '1. Open box', 0);
+INSERT INTO recipe VALUES (0, 'RecipeName', '1. Open box', 0);
+INSERT INTO recipe VALUES (1, 'Recipe2Name', '1. Open box', 0);
 --INSERT INTO recipeFood VALUES (0, 0, 2);
 --INSERT INTO recipeFood VALUES (0, 1, 5);
 --INSERT INTO recipeMealPlan VALUES (0, 0);
