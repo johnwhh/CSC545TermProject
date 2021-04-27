@@ -48,7 +48,7 @@ public class DatabaseManager {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("Update data error: " + e);
         } finally {
             ConnectDB.close(preparedStatement);
             ConnectDB.close(connection);

@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -189,7 +189,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         var foods = foodModel.getFoods();
         var recipes = recipeModel.getRecipes();
         var recipe = recipes.get(recipeID);
-        var ingredients = recipe.getFoods();
+        HashMap<Food, Integer> newIngredients = new HashMap<>();
         int foodKey = -1;
 
         // Loops through all the foods and gets the key of the matching food name
@@ -200,19 +200,25 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         }
 
         // Gets the food with the key
-        var food = foods.get(foodKey);
+        var newFood = foods.get(foodKey);
 
-        // Adds the food and quantity to the ingredients and updates the recipe
-        ingredients.put(food, quantity);
-        recipe.setFoods(ingredients);
-        recipeModel.updateRecipe(recipeID, recipe);
+        // Puts all the old ingredients in with the new one
+        for (Entry<Food, Integer> food : recipe.getFoods().entrySet()) {
+            newIngredients.put(food.getKey(), food.getValue());
+        }
+
+        newIngredients.put(newFood, quantity);
+        // Updates the recipe
+        Recipe newRecipe = new Recipe(recipe.getId(), recipe.getName(), recipe.getInstructions(), recipe.getCategory(), newIngredients);
+        recipeModel.updateRecipe(recipeID, newRecipe);
     }
 
     // Deletes an ingredient in the recipe
     private void deleteIngredient(int recipeID, int ingredientRowSpot) {
         var recipes = recipeModel.getRecipes();
         var recipe = recipes.get(recipeID);
-        var ingredients = recipe.getFoods();
+        HashMap<Food, Integer> ingredients = recipe.getFoods();
+        HashMap<Food, Integer> newIngredients = new HashMap<>();
         List<String> ingredientNameList = new ArrayList<>();
 
         // Gets all the ingredient names into a list
@@ -224,16 +230,15 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         String foodName = ingredientNameList.get(ingredientRowSpot);
 
         // Removes the food with matching name from ingredients
-        for (Iterator<Food> iter = ingredients.keySet().iterator(); iter.hasNext();) {
-            Food food = iter.next();
-            if (food.getName().equalsIgnoreCase(foodName)) {
-                iter.remove();
+        for (Entry<Food, Integer> food : recipe.getFoods().entrySet()) {
+            if (!foodName.equals(food.getKey().getName())) {
+                newIngredients.put(food.getKey(), food.getValue());
             }
         }
 
         // Updates the recipe
-        recipe.setFoods(ingredients);
-        recipeModel.updateRecipe(recipeID, recipe);
+        Recipe newRecipe = new Recipe(recipe.getId(), recipe.getName(), recipe.getInstructions(), recipe.getCategory(), newIngredients);
+        recipeModel.updateRecipe(recipeID, newRecipe);
     }
 
     // Gets a new ID for a recipe being added
@@ -264,7 +269,6 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     // Adds a recipe to the system
     private void addRecipe(String name, String category, String instructions) {
         Recipe recipe;
-        boolean categoryAdded = true;
         HashMap<Food, Integer> foods = new HashMap();
         int newRecipeID = getNewRecipeID();
 
@@ -495,8 +499,8 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 goBackToRecipeList();
             case "Delete Ingredient" -> {
                 deleteIngredient(recipeID, selectedIngredientRow);
-                recipeInformationView.setVisible(false);
-                recipeInformationView.setVisible(true);
+                deleteIngredientButton.setEnabled(false);
+                recipeInformationListView.reloadData();
             }
             case "Delete Recipe" -> {
                 deleteRecipe(recipeID);
@@ -514,11 +518,11 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
             }
             case "Confirm" -> {
                 int quantity = recipeIngredientAddView.getQuantity();
-                if (quantity >= 0) {
+                if (0 <= quantity && quantity <= 999) {
                     recipeAddIngredient(selectedFood, quantity, recipeID);
                     goBackToRecipe();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Amount must be a number.", "InfoBox: Amount Error", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Amount must be a between 0 and 1,000.", "InfoBox: Amount Error", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
             default ->
@@ -527,6 +531,8 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     }
 
     private void goBackToRecipe() {
+        deleteIngredientButton.setEnabled(false);
+        deleteIngredientButton.setVisible(true);
         confirmButton.setEnabled(false);
         confirmButton.setVisible(false);
         backToRecipeButton.setVisible(false);

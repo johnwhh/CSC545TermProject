@@ -3,6 +3,8 @@ package mealplanner.models;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 import mealplanner.DatabaseManager;
 import oracle.jdbc.OraclePreparedStatement;
@@ -128,10 +130,9 @@ public class RecipeModel {
                 preparedStatement.setString(2, recipe.getInstructions());
                 preparedStatement.setInt(3, recipe.getCategory().ordinal());
                 preparedStatement.setInt(4, id);
-
                 return preparedStatement;
             } catch (SQLException e) {
-                System.out.println(e);
+                System.out.println("Update recipes error: " + e);
             }
 
             return null;
@@ -139,27 +140,41 @@ public class RecipeModel {
 
         // Remove foods that are no longer in the recipe
         recipes.get(id).getFoods().forEach((food, quantity) -> {
-            if (recipe.getFoods().containsKey(food) == false) {
+            boolean oldFood = true;
+            for (Entry<Food, Integer> recipeFoodName : recipe.getFoods().entrySet()) {
+                if (food.getId() == recipeFoodName.getKey().getId()) {
+                    oldFood = false;
+                    break;
+                }
+            }
+            if (oldFood) {
                 DatabaseManager.updateData((connection) -> {
                     try {
                         String statement = "DELETE FROM recipeFood WHERE recipeID = ? AND foodID = ?";
                         OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
                         preparedStatement.setInt(1, id);
                         preparedStatement.setInt(2, food.getId());
-
                         return preparedStatement;
                     } catch (SQLException e) {
-                        System.out.println(e);
+                        System.out.println("Remove ingredients error: " + e);
                     }
 
                     return null;
                 });
             }
+
         });
 
         // Add foods that were not in the recipe before
         recipe.getFoods().forEach((food, quantity) -> {
-            if (recipes.get(id).getFoods().containsKey(food) == false) {
+            boolean newFood = true;
+            for (Entry<Food, Integer> recipeFoodName : recipes.get(id).getFoods().entrySet()) {
+                if (food.getId() == recipeFoodName.getKey().getId()) {
+                    newFood = false;
+                    break;
+                }
+            }
+            if (newFood) {
                 DatabaseManager.updateData((connection) -> {
                     try {
                         String statement = "INSERT INTO recipeFood VALUES (?, ?, ?)";
@@ -167,10 +182,9 @@ public class RecipeModel {
                         preparedStatement.setInt(1, recipe.getId());
                         preparedStatement.setInt(2, food.getId());
                         preparedStatement.setInt(3, quantity);
-
                         return preparedStatement;
                     } catch (SQLException e) {
-                        System.out.println(e);
+                        System.out.println("Add ingredients error: " + e);
                     }
 
                     return null;
@@ -179,18 +193,24 @@ public class RecipeModel {
         });
 
         // Update quantities of foods in recipe
-        recipe.getFoods().forEach((food, quantity) -> {
+        recipes.get(id).getFoods().forEach((food, quantity) -> {
             DatabaseManager.updateData((connection) -> {
+                int newQuantity = -1;
+                for (Map.Entry<Food, Integer> foodQuantity : recipe.getFoods().entrySet()) {
+                    if (foodQuantity.getKey().getId() == food.getId()) {
+                        newQuantity = foodQuantity.getValue();
+                        break;
+                    }
+                }
                 try {
-                    String statement = "UPDATE recipeFood SET (?, ?, ?)";
+                    String statement = "UPDATE recipeFood SET recipeID = ?, foodID = ?, quantity = ?";
                     OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
                     preparedStatement.setInt(1, recipe.getId());
                     preparedStatement.setInt(2, food.getId());
-                    preparedStatement.setInt(3, quantity);
-
+                    preparedStatement.setInt(3, newQuantity);
                     return preparedStatement;
                 } catch (SQLException e) {
-                    System.out.println(e);
+                    System.out.println("Update quantities error: " + e);
                 }
 
                 return null;
