@@ -41,9 +41,9 @@ CREATE TABLE recipeMealPlan (
     recipeID NUMBER(3),
     mealPlanID NUMBER(3),
     CONSTRAINT fkMRecipe FOREIGN KEY (recipeID) REFERENCES recipe(ID)
-    ON DELETE SET NULL,
+    ON DELETE CASCADE,
     CONSTRAINT fkRMealPlan FOREIGN KEY (mealPlanID) REFERENCES mealPlan(ID)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
 );
 
 CREATE TABLE fridgeFood (
@@ -51,9 +51,9 @@ CREATE TABLE fridgeFood (
     foodID NUMBER(3),
     quantity NUMBER(3),
     CONSTRAINT fkFFridge FOREIGN KEY (fridgeID) REFERENCES fridge(ID)
-    ON DELETE SET NULL,
+    ON DELETE CASCADE,
     CONSTRAINT fkFFood FOREIGN KEY (foodID) REFERENCES food(ID)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
 );
 
 CREATE TABLE recipeFood (
@@ -61,11 +61,9 @@ CREATE TABLE recipeFood (
     foodID NUMBER(3),
     quantity NUMBER(3),
     CONSTRAINT fkFRecipe FOREIGN KEY (recipeID) REFERENCES recipe(ID)
-    ON DELETE SET NULL,
+    ON DELETE CASCADE,
     CONSTRAINT fkRFood FOREIGN KEY (foodID) REFERENCES food(ID)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
 );
 
 INSERT INTO fridge VALUES (0);
-
-
