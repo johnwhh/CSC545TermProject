@@ -354,24 +354,27 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
     
     @Override
     public void didSelectRow(ListView listView, int row) {
-        Recipe recipe;
-        switch (listView.title) {
-            case "Breakfast" -> {
-                recipe = (Recipe) recipeList.get(breakfastRecipeIds[row]);
-                selectedMealPlan = (MealPlan) breakfastMealPlans.get(breakfastMealPlanId);
-                System.out.println(selectedMealPlan);
+        if (row >= 0) {
+            Recipe recipe;
+            switch (listView.title) {
+                case "Breakfast" -> {
+                    recipe = (Recipe) recipeList.get(breakfastRecipeIds[row]);
+                    selectedMealPlan = (MealPlan) breakfastMealPlans.get(breakfastMealPlanId);
+                    System.out.println(selectedMealPlan);
+                }
+                case "Lunch" -> {
+                    recipe = (Recipe) recipeList.get(lunchRecipeIds[row]);
+                    selectedMealPlan = (MealPlan) lunchMealPlans.get(lunchMealPlanId);
+                }
+                case "Dinner" -> {
+                    recipe = (Recipe) recipeList.get(dinnerRecipeIds[row]);
+                    selectedMealPlan = (MealPlan) dinnerMealPlans.get(dinnerMealPlanId);
+                }
+                default ->
+                    recipe = (Recipe) recipeList.get(recipeIds[row]);
             }
-            case "Lunch" -> {
-                recipe = (Recipe) recipeList.get(lunchRecipeIds[row]);
-                selectedMealPlan = (MealPlan) lunchMealPlans.get(lunchMealPlanId);
-            }
-            case "Dinner" -> {
-                recipe = (Recipe) recipeList.get(dinnerRecipeIds[row]);
-                selectedMealPlan = (MealPlan) dinnerMealPlans.get(dinnerMealPlanId);
-            }
-            default -> recipe = (Recipe) recipeList.get(recipeIds[row]);
+            selectedRecipe = recipe;
         }
-        selectedRecipe = recipe;
     }
 
     @Override
