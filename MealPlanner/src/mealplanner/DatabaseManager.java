@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import mealplanner.models.Food;
+import mealplanner.models.FoodQuantity;
 import mealplanner.models.Recipe;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
@@ -51,7 +52,7 @@ public class DatabaseManager {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("Update data error: " + e);
         } finally {
             ConnectDB.close(preparedStatement);
             ConnectDB.close(connection);
@@ -86,13 +87,13 @@ public class DatabaseManager {
             String recipeInstructions = resultSet.getString("instructions");
             Recipe.Category recipeCategory = Recipe.Category.values()[resultSet.getInt("category")];
 
-            HashMap<Integer, Object[]> foods = new HashMap<>();
+            HashMap<Integer, FoodQuantity> foods = new HashMap<>();
             String foodsStatement = "SELECT * FROM food, recipeFood WHERE food.ID = recipeFood.foodID AND recipeFood.recipeID = " + recipeId;
             getData(foodsStatement, (foodResultSet) -> {
                 try {
                     int quantity = foodResultSet.getInt("quantity");
                     Food food = getFood(foodResultSet, "foodID");
-                    Object[] foodQuantity = {food, quantity};
+                    FoodQuantity foodQuantity = new FoodQuantity(food, quantity);
 
                     if (food != null) {
                         foods.put(food.getId(), foodQuantity);

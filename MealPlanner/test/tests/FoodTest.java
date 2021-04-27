@@ -28,31 +28,14 @@ public class FoodTest {
     }
 
     @Test
-    public void testAddUpdateCaloriesRemoveFood() {
-        final int id = 999;
-        FoodModel foodModel = new FoodModel();
-
-        Food newFood = new Food(id, "Mysterious Food", Food.Group.VEGETABLES, 100, 200, 300, 400, 500, 600, 700);
-        foodModel.addFood(newFood);
-        assertEquals(true, foodModel.getFoods().containsKey(id));
-
-        final int newCalories = 42;
-        newFood.setCalories(newCalories);
-        foodModel.updateFood(id, newFood);
-        assertEquals(newCalories, foodModel.getFoods().get(id).getCalories());
-
-        foodModel.removeFood(id);
-        assertEquals(false, foodModel.getFoods().containsKey(id));
-    }
-    
-    @Test
     public void testGetAvailableId() {
         List<Integer> usedIds = new ArrayList<>();
         usedIds.add(0);
         usedIds.add(2);
-        
+
         int id = DatabaseManager.getAvailableId(Food.class, usedIds);
-        
+
         assertEquals(1, id);
     }
+
 }

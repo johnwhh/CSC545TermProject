@@ -88,6 +88,7 @@ public class ListView extends javax.swing.JPanel {
         scrollPanel = new javax.swing.JScrollPane();
         list = new javax.swing.JList<>();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 440, 300));
         setMaximumSize(new java.awt.Dimension(460, 400));
         setMinimumSize(new java.awt.Dimension(460, 400));

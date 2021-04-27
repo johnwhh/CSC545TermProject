@@ -30,23 +30,22 @@ public class ShoppingListTest {
 
     @Test
     public void testMakeValidShoppingList() {
+        final int FOOD_ID_0 = 0;
+        final int FOOD_ID_1 = 1;
         final int FOOD_QUANTITY = 3;
-        
+        final int EXPECTED_FOOD_QUANTITY = 3;
+
         // Make food and food quantities dictionary
-        HashMap<Integer, Object[]> foodQuantities = new HashMap<>();
-        
-        Food food1 = new Food(0, "Havarti", Food.Group.DAIRY, 10, 9, 8, 7, 6, 5, 4);
-        Object[] foodQuantity = new Object[2];
-        foodQuantity[0] = food1;
-        foodQuantity[1] = FOOD_QUANTITY;
-        foodQuantities.put(0, foodQuantity);
-        
-        Food food2 = new Food(1, "Turkey", Food.Group.PROTEINS, 10, 9, 25, 7, 6, 5, 4);
-        Object[] foodQuantity2 = new Object[2];
-        foodQuantity2[0] = food2;
-        foodQuantity2[1] = FOOD_QUANTITY;
-        foodQuantities.put(1, foodQuantity2);
-        
+        HashMap<Integer, FoodQuantity> foodQuantities = new HashMap<>();
+
+        Food food1 = new Food(FOOD_ID_0, "Havarti", Food.Group.DAIRY, 10, 9, 8, 7, 6, 5, 4);
+        FoodQuantity foodQuantity1 = new FoodQuantity(food1, FOOD_QUANTITY);
+        foodQuantities.put(FOOD_ID_0, foodQuantity1);
+
+        Food food2 = new Food(FOOD_ID_1, "Turkey", Food.Group.PROTEINS, 10, 9, 25, 7, 6, 5, 4);
+        FoodQuantity foodQuantity2 = new FoodQuantity(food2, FOOD_QUANTITY);
+        foodQuantities.put(FOOD_ID_1, foodQuantity2);
+
         // Make new recipe, add it to recipe dictionary which is added to mealPlan1
         Recipe recipe1 = new Recipe(0, "Chef's Special", "1. Find a chef", Recipe.Category.ENTREE, foodQuantities);
         HashMap<Integer, Recipe> recipes = new HashMap<>();
@@ -58,14 +57,13 @@ public class ShoppingListTest {
         mealPlanList.add(mealPlan1);
         MealPlan[] mealPlanArray = new MealPlan[mealPlanList.size()];
         mealPlanList.toArray(mealPlanArray);
-        
+
         Fridge fridge = new Fridge();
-        
+
         ShoppingList shoppingList = new ShoppingList("Kroger List", mealPlanArray, fridge);
-        
-        HashMap<Food, Integer> expectedFoodQuantities = new HashMap<>();
-        expectedFoodQuantities.put(food1, FOOD_QUANTITY);
-        expectedFoodQuantities.put(food2, FOOD_QUANTITY);
+        HashMap<Integer, FoodQuantity> expectedFoodQuantities = new HashMap<>();
+        expectedFoodQuantities.put(FOOD_ID_0, new FoodQuantity(food1, EXPECTED_FOOD_QUANTITY));
+        expectedFoodQuantities.put(FOOD_ID_1, new FoodQuantity(food2, EXPECTED_FOOD_QUANTITY));
         assertEquals(expectedFoodQuantities, shoppingList.foodQuantities);
     }
 }

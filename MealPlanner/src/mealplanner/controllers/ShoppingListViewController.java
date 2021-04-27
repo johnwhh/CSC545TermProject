@@ -64,8 +64,8 @@ public class ShoppingListViewController extends JPanel implements ListViewDataSo
         mealPlanList.toArray(mealPlanArray);
         
         ShoppingList shoppingList = new ShoppingList("Kroger List", mealPlanArray, fridgeModel.getFridge());
-        shoppingList.foodQuantities.forEach((food, quantity) -> {
-            foodNameList.add(food.getName() + " (" + quantity + ")");
+        shoppingList.foodQuantities.forEach((foodId, foodQuantity) -> {
+            foodNameList.add(foodQuantity.food.getName() + " (" + foodQuantity.quantity + ")");
         });
         
         missingFoodNames = new String[foodNameList.size()];

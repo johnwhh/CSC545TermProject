@@ -4,6 +4,7 @@ package mealplanner.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * @date 16-04-2021
@@ -12,48 +13,44 @@ import java.util.List;
 public class ShoppingList {
 
     public final String name;
-    public final HashMap<Food, Integer> foodQuantities;
+    public final HashMap<Integer, FoodQuantity> foodQuantities;
 
     public ShoppingList(String name, MealPlan[] mealPlans, Fridge fridge) {
         this.name = name;
         this.foodQuantities = getMissingFood(mealPlans, fridge);
     }
 
-    private HashMap<Food, Integer> getMissingFood(MealPlan[] mealPlans, Fridge fridge) {
-        HashMap<Food, Integer> missingFoodQuantities = new HashMap<>();
+    private HashMap<Integer, FoodQuantity> getMissingFood(MealPlan[] mealPlans, Fridge fridge) {
+        HashMap<Integer, FoodQuantity> missingFoodQuantities = new HashMap<>();
 
         for (MealPlan mealPlan : mealPlans) {
             for (Recipe recipe : mealPlan.getRecipes().values()) {
-                for (Object[] recipeFoodQuantities : recipe.getFoods().values()) {
-                    Food food = (Food) recipeFoodQuantities[0];
-                    int quantity = (int) recipeFoodQuantities[1];
-
-                    int existingQuantity = 0;
-                    if (missingFoodQuantities.get(food) != null) {
-                        existingQuantity = (int) missingFoodQuantities.get(food);
+                for (Entry<Integer, FoodQuantity> foodQuantity : recipe.getFoods().entrySet()) {
+                    FoodQuantity existingFoodQuantity = new FoodQuantity(foodQuantity.getValue().food, 0);
+                    if (missingFoodQuantities.containsKey(foodQuantity.getKey())) {
+                        existingFoodQuantity.quantity = (int) missingFoodQuantities.get(foodQuantity.getKey()).quantity;
                     }
 
-                    missingFoodQuantities.put(food, existingQuantity + quantity);
+                    existingFoodQuantity.quantity += foodQuantity.getValue().quantity;
+                    missingFoodQuantities.put(foodQuantity.getKey(), existingFoodQuantity);
                 }
             }
         }
 
-        for (Object[] fridgeFoodQuantities : fridge.getFoods().values()) {
-            Food food = (Food) fridgeFoodQuantities[0];
-            int quantity = (int) fridgeFoodQuantities[1];
+        for (Entry<Integer, FoodQuantity> fridgeFoodQuantity : fridge.getFoods().entrySet()) {
+            if (missingFoodQuantities.containsKey(fridgeFoodQuantity.getKey())) {
+                FoodQuantity neededFoodQuantity = missingFoodQuantities.get(fridgeFoodQuantity.getKey());
 
-            if (missingFoodQuantities.get(food) != null) {
-                int neededQuantity = (int) missingFoodQuantities.get(food);
-                
-                int missingQuantity = neededQuantity - quantity;
-                if (missingQuantity > 0) {
-                    missingFoodQuantities.put(food, missingQuantity);
+                FoodQuantity missingFoodQuantity = neededFoodQuantity;
+                missingFoodQuantity.quantity -= fridgeFoodQuantity.getValue().quantity;
+                if (missingFoodQuantity.quantity > 0) {
+                    missingFoodQuantities.put(fridgeFoodQuantity.getKey(), missingFoodQuantity);
                 } else {
-                    missingFoodQuantities.remove(food);
+                    missingFoodQuantities.remove(fridgeFoodQuantity.getKey());
                 }
             }
         }
-        
+
         return missingFoodQuantities;
     }
 }

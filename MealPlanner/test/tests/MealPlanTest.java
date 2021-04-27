@@ -1,9 +1,10 @@
 // This project has no license.
 package tests;
 
-import java.util.Date;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import static junit.framework.Assert.*;
+import mealplanner.DatabaseManager;
 import mealplanner.models.*;
 import org.junit.After;
 import org.junit.Before;
@@ -25,31 +26,16 @@ public class MealPlanTest {
     @After
     public void tearDown() {
     }
-
+    
     @Test
-    public void testAddUpdateTypeRemoveMealPlan() {
-        final int ID = 999;
-        MealPlanModel mealPlanModel = new MealPlanModel();
-        assertEquals(0, mealPlanModel.getMealPlans().size());
+    public void testGetAvailableId() {
+        List<Integer> usedIds = new ArrayList<>();
+        usedIds.add(0);
+        usedIds.add(2);
 
-        
-        Recipe recipe = new Recipe(ID, "Mystery Recipe", "1. Clap hand", Recipe.Category.DESSERT, new HashMap<>());
-        RecipeModel recipeModel = new RecipeModel();
-        recipeModel.addRecipe(recipe);
+        int id = DatabaseManager.getAvailableId(MealPlan.class, usedIds);
 
-        HashMap<Integer, Recipe> recipes = new HashMap<>();
-        recipes.put(ID, recipe);
-        MealPlan newMealPlan = new MealPlan(ID, MealPlan.Type.LUNCH, new Date(), recipes);
-        mealPlanModel.addMealPlan(newMealPlan);
-
-        assertEquals(1, mealPlanModel.getMealPlans().size());
-        assertEquals(true, mealPlanModel.getMealPlans().containsKey(ID));
-
-        newMealPlan.setType(MealPlan.Type.BREAKFAST);
-        mealPlanModel.updateMealPlan(ID, newMealPlan);
-        assertEquals(MealPlan.Type.BREAKFAST, mealPlanModel.getMealPlans().get(ID).getType());
-
-        mealPlanModel.removeMealPlan(ID);
-        assertEquals(0, mealPlanModel.getMealPlans().size());
+        assertEquals(1, id);
     }
+
 }
