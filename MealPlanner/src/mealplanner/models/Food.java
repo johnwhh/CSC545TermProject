@@ -1,6 +1,8 @@
 // This project has no license.
 package mealplanner.models;
 
+import java.util.Objects;
+
 /**
  * @date 16-04-2021
  * @author johnholtzworth
@@ -12,7 +14,12 @@ public class Food {
         VEGETABLES,     // 1
         GRAINS,         // 2
         PROTEINS,       // 3
-        DAIRY           // 4
+        DAIRY;          // 4
+        
+        @Override
+        public String toString() {
+            return name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
+        }
     }
 
     private int id;
@@ -123,4 +130,48 @@ public class Food {
     public String toString() {
         return "Food{" + "id=" + id + ", name=" + name + ", group=" + group + ", calories=" + calories + ", sugar=" + sugar + ", protein=" + protein + ", sodium=" + sodium + ", fat=" + fat + ", cholesterol=" + cholesterol + ", carbs=" + carbs + '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Food other = (Food) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (this.calories != other.calories) {
+            return false;
+        }
+        if (this.sugar != other.sugar) {
+            return false;
+        }
+        if (this.protein != other.protein) {
+            return false;
+        }
+        if (this.sodium != other.sodium) {
+            return false;
+        }
+        if (this.fat != other.fat) {
+            return false;
+        }
+        if (this.cholesterol != other.cholesterol) {
+            return false;
+        }
+        if (this.carbs != other.carbs) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return this.group == other.group;
+    }
+    
+    
 }

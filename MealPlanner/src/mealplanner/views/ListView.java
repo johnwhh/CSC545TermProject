@@ -1,9 +1,7 @@
 // This project has no license.
 package mealplanner.views;
 
-import java.awt.Dimension;
 import javax.swing.AbstractListModel;
-import mealplanner.MealPlanner;
 
 /**
  * @date 21-04-2021
@@ -19,6 +17,7 @@ public class ListView extends javax.swing.JPanel {
 
     /**
      * Creates new form FoodListView
+     *
      * @param title The title of the list view.
      */
     public ListView(String title) {
@@ -46,9 +45,14 @@ public class ListView extends javax.swing.JPanel {
         initComponents();
     }
 
+    public void deselect() {
+        list.clearSelection();
+    }
+
     public void reloadData() {
         ListView self = this;
-        
+        deselect();
+
         contents = new AbstractListModel<String>() {
             @Override
             public int getSize() {
@@ -66,10 +70,11 @@ public class ListView extends javax.swing.JPanel {
                 return "Element " + i;
             }
         };
-        
+
         list.setModel(contents);
+        list.updateUI();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,6 +88,7 @@ public class ListView extends javax.swing.JPanel {
         scrollPanel = new javax.swing.JScrollPane();
         list = new javax.swing.JList<>();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 440, 300));
         setMaximumSize(new java.awt.Dimension(460, 400));
         setMinimumSize(new java.awt.Dimension(460, 400));
@@ -126,7 +132,10 @@ public class ListView extends javax.swing.JPanel {
     private void listValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listValueChanged
         if (evt.getValueIsAdjusting() == false) {
             if (delegate != null) {
-                delegate.didSelectRow(this, list.getSelectedIndex());
+                int index = list.getSelectedIndex();
+                if (index != -1) {
+                    delegate.didSelectRow(this, index);
+                }
             }
         }
     }//GEN-LAST:event_listValueChanged

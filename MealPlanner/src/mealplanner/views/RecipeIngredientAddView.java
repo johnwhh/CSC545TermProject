@@ -27,10 +27,12 @@ public class RecipeIngredientAddView extends javax.swing.JPanel {
         amountLabel = new javax.swing.JLabel();
         ingredientAmountBox = new javax.swing.JSpinner();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(460, 680));
         setMinimumSize(new java.awt.Dimension(460, 680));
 
-        amountLabel.setText("Amount(Number)");
+        amountLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        amountLabel.setText("Quantity");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -38,12 +40,10 @@ public class RecipeIngredientAddView extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ingredientAmountBox)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(amountLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ingredientAmountBox, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(181, 181, 181)
-                .addComponent(amountLabel)
-                .addContainerGap(197, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -60,7 +60,7 @@ public class RecipeIngredientAddView extends javax.swing.JPanel {
         try {
             return (Integer) (ingredientAmountBox.getValue());
         } catch (Exception e){
-            JOptionPane.showMessageDialog(null, "Amount must be a number", "InfoBox: Amount Error", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Quantity must be a number", "Invalid Input", JOptionPane.INFORMATION_MESSAGE);
             return -1;
         }
     }

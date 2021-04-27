@@ -21,15 +21,16 @@ public class FridgeModel {
     }
 
     private void fetchFridge() {
-        HashMap<Food, Integer> foods = new HashMap<>();
+        HashMap<Integer, FoodQuantity> foods = new HashMap<>();
         String statement = "SELECT * FROM fridgeFood, food WHERE fridgeFood.foodID = food.ID";
         DatabaseManager.getData(statement, (resultSet) -> {
             try {
                 int quantity = resultSet.getInt("quantity");
                 Food food = DatabaseManager.getFood(resultSet, "foodID");
+                FoodQuantity foodQuantity = new FoodQuantity(food, quantity);
 
                 if (food != null) {
-                    foods.put(food, quantity);
+                    foods.put(food.getId(), foodQuantity);
                 }
             } catch (SQLException e) {
                 System.out.println(e);
@@ -44,12 +45,11 @@ public class FridgeModel {
     }
 
     public Fridge getFridge(Predicate<Food> predicate) {
-        HashMap<Food, Integer> dictionary = new HashMap<>();
+        HashMap<Integer, FoodQuantity> dictionary = new HashMap<>();
         fridge.getFoods().entrySet().forEach(entry -> {
-            Food food = entry.getKey();
-            int quantity = entry.getValue();
+            Food food = (Food) entry.getValue().food;
             if (predicate.test(food)) {
-                dictionary.put(food, quantity);
+                dictionary.put(entry.getKey(), entry.getValue());
             }
         });
 

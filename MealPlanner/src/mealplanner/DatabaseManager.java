@@ -4,7 +4,11 @@ package mealplanner;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import mealplanner.models.Food;
+import mealplanner.models.FoodQuantity;
 import mealplanner.models.Recipe;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
@@ -83,15 +87,16 @@ public class DatabaseManager {
             String recipeInstructions = resultSet.getString("instructions");
             Recipe.Category recipeCategory = Recipe.Category.values()[resultSet.getInt("category")];
 
-            HashMap<Food, Integer> foods = new HashMap<>();
+            HashMap<Integer, FoodQuantity> foods = new HashMap<>();
             String foodsStatement = "SELECT * FROM food, recipeFood WHERE food.ID = recipeFood.foodID AND recipeFood.recipeID = " + recipeId;
             getData(foodsStatement, (foodResultSet) -> {
                 try {
                     int quantity = foodResultSet.getInt("quantity");
                     Food food = getFood(foodResultSet, "foodID");
+                    FoodQuantity foodQuantity = new FoodQuantity(food, quantity);
 
                     if (food != null) {
-                        foods.put(food, quantity);
+                        foods.put(food.getId(), foodQuantity);
                     }
                 } catch (SQLException e) {
                     System.out.println(e);
@@ -104,5 +109,41 @@ public class DatabaseManager {
         }
 
         return null;
+    }
+
+    public static int getAvailableId(Class type, List<Integer> usedIds) {
+        String className = type.getSimpleName();
+        
+        if (className.equals("Food") || className.equals("MealPlan") || className.equals("Recipe")) {
+            List<Integer> ids = usedIds;
+
+            if (ids == null) {
+                String statement = "SELECT * FROM " + className.substring(0, 1).toLowerCase() + className.substring(1).toLowerCase();
+                
+                List<Integer> tempIds = new ArrayList<>();
+                getData(statement, (resultSet) -> {
+                    try {
+                        int id = resultSet.getInt("ID");
+                        tempIds.add(id);
+                    } catch (SQLException e) {
+                    }
+                });
+                ids = tempIds;
+            }
+            
+            Collections.sort(ids);
+
+            int currentId = 0;
+            for (Integer id : ids) {
+                if (currentId != id) {
+                    return currentId;
+                }
+                currentId++;
+            }
+
+            return currentId;
+        }
+
+        return -1;
     }
 }

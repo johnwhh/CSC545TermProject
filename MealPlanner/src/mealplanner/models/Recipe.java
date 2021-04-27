@@ -13,16 +13,21 @@ public class Recipe {
         DESSERT,            // 0
         SNACK,              // 1
         APPETIZER,          // 2
-        ENTREE              // 3
+        ENTREE;             // 3
+        
+        @Override
+        public String toString() {
+            return name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
+        }
     }
 
     private int id;
     private String name;
     private String instructions;
     private Category category;
-    private HashMap<Food, Integer> foods;
+    private HashMap<Integer, FoodQuantity> foods;
 
-    public Recipe(int id, String name, String instructions, Category category, HashMap<Food, Integer> foods) {
+    public Recipe(int id, String name, String instructions, Category category, HashMap<Integer, FoodQuantity> foods) {
         this.id = id;
         this.name = name;
         this.instructions = instructions;
@@ -62,11 +67,11 @@ public class Recipe {
         this.category = category;
     }
 
-    public HashMap<Food, Integer> getFoods() {
+    public HashMap<Integer, FoodQuantity> getFoods() {
         return foods;
     }
 
-    public void setFoods(HashMap<Food, Integer> foods) {
+    public void setFoods(HashMap<Integer, FoodQuantity> foods) {
         this.foods = foods;
     }
 

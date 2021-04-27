@@ -1,25 +1,26 @@
 // This project has no license.
 package mealplanner.views;
 
+import mealplanner.models.Recipe;
+
 /**
  *
  * @author Matthew
  */
 public class RecipeInformationView extends javax.swing.JPanel {
-    
+
     private String recipeName = "";
     private String recipeCategory = "";
     private String recipeInstructions = "";
-    
+
     /**
      * Creates new form RecipeInformationView
      */
     public RecipeInformationView() {
         initComponents();
-        recipeCategoryDropdown.add("Dessert");
-        recipeCategoryDropdown.add("Snack");
-        recipeCategoryDropdown.add("Appetizer");
-        recipeCategoryDropdown.add("Entree");
+        for (Recipe.Category category : Recipe.Category.values()) {
+            recipeCategoryDropdown.add(category.toString());
+        }
     }
 
     /**
@@ -36,10 +37,10 @@ public class RecipeInformationView extends javax.swing.JPanel {
         recipeInstructionLabel = new javax.swing.JLabel();
         recipeInstructionScroll = new javax.swing.JScrollPane();
         recipeInstructionText = new javax.swing.JTextArea();
-        recipeNameScroll = new javax.swing.JScrollPane();
-        recipeNameText = new javax.swing.JTextArea();
         recipeCategoryDropdown = new java.awt.Choice();
+        recipeNameTextField = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(460, 680));
         setMinimumSize(new java.awt.Dimension(460, 680));
 
@@ -52,13 +53,12 @@ public class RecipeInformationView extends javax.swing.JPanel {
         recipeInstructionText.setColumns(20);
         recipeInstructionText.setLineWrap(true);
         recipeInstructionText.setRows(5);
-        recipeInstructionText.setText("Instructions");
+        recipeInstructionText.setText("Write your recipe's instructions here.");
         recipeInstructionScroll.setViewportView(recipeInstructionText);
 
-        recipeNameText.setColumns(20);
-        recipeNameText.setRows(5);
-        recipeNameText.setText("Name");
-        recipeNameScroll.setViewportView(recipeNameText);
+        recipeCategoryDropdown.setBackground(new java.awt.Color(255, 255, 255));
+
+        recipeNameTextField.setText("My New Recipe");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -67,19 +67,19 @@ public class RecipeInformationView extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(189, 189, 189)
+                        .addComponent(recipeNameLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(recipeInstructionScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                             .addComponent(recipeCategoryDropdown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(recipeNameScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(170, 170, 170)
                                 .addComponent(recipeCategoryLabel)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(189, 189, 189)
-                        .addComponent(recipeNameLabel)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(recipeNameTextField))))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(174, 174, 174)
@@ -92,8 +92,8 @@ public class RecipeInformationView extends javax.swing.JPanel {
                 .addGap(6, 6, 6)
                 .addComponent(recipeNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(recipeNameScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(recipeNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
                 .addComponent(recipeCategoryLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(recipeCategoryDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -113,32 +113,31 @@ public class RecipeInformationView extends javax.swing.JPanel {
     private javax.swing.JScrollPane recipeInstructionScroll;
     private javax.swing.JTextArea recipeInstructionText;
     private javax.swing.JLabel recipeNameLabel;
-    private javax.swing.JScrollPane recipeNameScroll;
-    private javax.swing.JTextArea recipeNameText;
+    private javax.swing.JTextField recipeNameTextField;
     // End of variables declaration//GEN-END:variables
 
-   public void setRecipeData(String name, String category, String instructions){
-       recipeName = name;
-       recipeCategory = category;
-       recipeInstructions = instructions;
-       displayRecipeData();
-   }
-   
-   private void displayRecipeData(){
-       recipeNameText.setText(recipeName);
-       recipeCategoryDropdown.select(recipeCategory);
-       recipeInstructionText.setText(recipeInstructions);
-   }
-   
-   public String getRecipeName(){
-       return recipeNameText.getText();
-   }
-   
-   public String getRecipeCategory(){
-       return recipeCategoryDropdown.getSelectedItem();
-   }
-   
-   public String getRecipeInstructions(){
-       return recipeInstructionText.getText();
-   }
+    public void setRecipeData(String name, String category, String instructions) {
+        recipeName = name;
+        recipeCategory = category;
+        recipeInstructions = instructions;
+        displayRecipeData();
+    }
+
+    private void displayRecipeData() {
+        recipeNameTextField.setText(recipeName);
+        recipeCategoryDropdown.select(recipeCategory);
+        recipeInstructionText.setText(recipeInstructions);
+    }
+
+    public String getRecipeName() {
+        return recipeNameTextField.getText();
+    }
+
+    public int getRecipeCategory() {
+        return recipeCategoryDropdown.getSelectedIndex();
+    }
+
+    public String getRecipeInstructions() {
+        return recipeInstructionText.getText();
+    }
 }

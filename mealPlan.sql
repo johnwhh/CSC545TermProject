@@ -9,7 +9,7 @@ DROP TABLE food;
 
 CREATE TABLE recipe (
     ID NUMBER(3) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR2(50) NOT NULL,
     instructions CHAR(256) NOT NULL,
     category NUMBER(2)
 );
@@ -68,34 +68,4 @@ CREATE TABLE recipeFood (
 
 INSERT INTO fridge VALUES (0);
 
-INSERT INTO food VALUES (0, 'Sour Patch Kids', 4, 110, 24, 0, 25, 0, 0, 27);
-INSERT INTO recipe VALUES (0, 'Biig Sour Patch Kids', 'Smush up a bunch of Sour Patch Kids', 1);
-INSERT INTO recipefood VALUES (0, 0, 12);
 
--- Here are various statements for debugging:
-
---INSERT INTO fridgeFood VALUES (0, 0, 4);
---INSERT INTO fridgeFood VALUES (0, 1, 3);
---
---INSERT INTO food VALUES (0, 'FoodName', 0, 0, 0, 0, 0, 0, 0, 0);
---INSERT INTO food VALUES (1, 'FoodName2', 0, 0, 0, 0, 0, 0, 0, 0);
---
---INSERT INTO mealPlan VALUES (0, 0, CURRENT_DATE);
---INSERT INTO recipe VALUES (0, 'RecipeName', '1. Open box', 0);
---INSERT INTO recipeFood VALUES (0, 0, 2);
---INSERT INTO recipeFood VALUES (0, 1, 5);
---INSERT INTO recipeMealPlan VALUES (0, 0);
-
---SELECT * FROM mealPlan, recipeMealPlan, recipe
---WHERE mealPlan.ID = recipeMealPlan.mealPlanID 
---AND recipeMealPlan.recipeID = recipe.ID;
---
---SELECT * FROM mealPlan, recipeMealPlan, recipe WHERE mealPlan.id = recipeMealPlan.mealPlanID AND recipeMealPlan.recipeID = recipe.id;
---
---SELECT * FROM fridgeFood, food WHERE fridgeFood.foodID = food.ID;
---
---SELECT * FROM food;
---
---DELETE FROM food WHERE ID = 999;
---
---UPDATE mealPlan SET type = 0, mealDate = CURRENT_DATE WHERE ID = 999;
