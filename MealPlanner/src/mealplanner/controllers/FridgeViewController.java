@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import mealplanner.DatabaseManager;
 import mealplanner.MealPlanner;
@@ -41,7 +42,7 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
 
     private ListView fridgeFoodListView;
     private Food selectedFridgeFood = null;
-    private HashMap<Integer, Object[]> fridgeFoods;
+    private HashMap<Integer, FoodQuantity> fridgeFoods;
     private String[] fridgeFoodNames;
     private int[] fridgeFoodIds;
 
@@ -140,7 +141,9 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
 
         JButton editFoodButton = new JButton();
         editFoodButton.addActionListener((ActionEvent e) -> {
-            setState(State.EDITING_FOOD);
+            if (selectedFood != null) {
+                setState(State.EDITING_FOOD);
+            }
         });
         editFoodButton.setText("Edit food");
         editFoodButton.setBounds(240, 560, 90, 30);
@@ -158,7 +161,7 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
     }
 
     private void showRemoveFridgeFoodView() {
-        int currentQuantity = (int) fridgeFoods.get(selectedFridgeFood.getId())[1];
+        int currentQuantity = (int) fridgeFoods.get(selectedFridgeFood.getId()).quantity;
         QuantityView quantityView = new QuantityView("How many " + selectedFridgeFood.getName() + " would you like to remove from your fridge? You currently have " + currentQuantity + ".", (quantity) -> {
             if (quantity != -1) {
                 if (quantity >= currentQuantity) {
@@ -168,11 +171,11 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
                     fridgeModel.updateFoodQuantity(selectedFridgeFood.getId(), newQuantity);
                 }
 
-                selectedFridgeFood = null;
                 updateFridgeFoods();
                 fridgeFoodListView.reloadData();
             }
 
+            selectedFridgeFood = null;
             setState(State.SHOWING_LIST);
         });
         quantityView.setBounds(0, 0, getBounds().width, getBounds().height);
@@ -184,11 +187,12 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
         QuantityView quantityView = new QuantityView("How many " + selectedFood.getName() + " would you like to add to your fridge?", (quantity) -> {
             if (quantity != -1) {
                 fridgeModel.addFood(selectedFood.getId(), quantity);
-                selectedFood = null;
+
                 updateFridgeFoods();
                 fridgeFoodListView.reloadData();
             }
 
+            selectedFood = null;
             setState(State.SHOWING_LIST);
         });
         quantityView.setBounds(0, 0, getBounds().width, getBounds().height);
@@ -199,12 +203,18 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
     private void showAddFoodView() {
         EditFoodView addFoodView = new EditFoodView("Add Food", DatabaseManager.getAvailableId(Food.class, null), null, (food) -> {
             if (food != null) {
+                if (food.getName().length() > 50) {
+                    JOptionPane.showMessageDialog(null, "Food name must be no longer than 50 characters.", "Invalid Food Name Length", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                
                 foodModel.addFood(food);
-                selectedFood = null;
+
                 updateFoods();
                 foodListView.reloadData();
             }
 
+            selectedFood = null;
             setState(State.SHOWING_LIST);
         });
         addFoodView.setBounds(0, 0, 460, 500);
@@ -214,25 +224,31 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
 
     private void showEditFoodView() {
         EditFoodView addFoodView = new EditFoodView("Edit Food", selectedFood.getId(), selectedFood, (food) -> {
+
             if (food != null) {
+                if (food.getName().length() > 50) {
+                    JOptionPane.showMessageDialog(null, "Food name must be no longer than 50 characters.", "Invalid Food Name Length", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                
                 foodModel.updateFood(selectedFood.getId(), food);
-                selectedFood = null;
                 updateFoods();
                 foodListView.reloadData();
             }
 
+            selectedFood = null;
             setState(State.SHOWING_LIST);
         });
         addFoodView.setBounds(0, 0, 460, 500);
         addFoodView.setBackground(Color.WHITE);
         add(addFoodView);
     }
-    
+
     private void showRemoveFoodConfirmation() {
         ConfirmationView confirmationView = new ConfirmationView("Are you sure you want to permanently delete this food?", (status) -> {
             if (status == true) {
                 foodModel.removeFood(selectedFood.getId());
-                selectedFood = null;
+
                 updateFoods();
                 foodListView.reloadData();
 
@@ -240,6 +256,7 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
                 fridgeFoodListView.reloadData();
             }
 
+            selectedFood = null;
             setState(State.SHOWING_LIST);
         });
         confirmationView.setBounds(0, 0, getBounds().width, getBounds().height);
@@ -253,12 +270,9 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
         fridgeFoodIds = new int[fridgeFoods.size()];
         int i = 0;
 
-        for (Entry<Integer, Object[]> fridgeFood : fridgeFoods.entrySet()) {
-            Food food = (Food) fridgeFood.getValue()[0];
-            int quantity = (int) fridgeFood.getValue()[1];
-
-            foodNameList.add(food.getName() + " (" + quantity + ")");
-            fridgeFoodIds[i] = fridgeFood.getKey();
+        for (Entry<Integer, FoodQuantity> fridgeFoodQuantity : fridgeFoods.entrySet()) {
+            foodNameList.add(fridgeFoodQuantity.getValue().food.getName() + " (" + fridgeFoodQuantity.getValue().quantity + ")");
+            fridgeFoodIds[i] = fridgeFoodQuantity.getKey();
             i++;
         }
 
@@ -301,7 +315,7 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
     @Override
     public void didSelectRow(ListView listView, int row) {
         if (listView.title.equals("Your Fridge")) {
-            Food food = (Food) fridgeFoods.get(fridgeFoodIds[row])[0];
+            Food food = (Food) fridgeFoods.get(fridgeFoodIds[row]).food;
             selectedFridgeFood = food;
             return;
         }

@@ -68,6 +68,7 @@ CREATE TABLE recipeFood (
 
 INSERT INTO fridge VALUES (0);
 
+<<<<<<< HEAD
 -- Here are various statements for debugging:
 --SELECT * FROM mealPlan;
 --SELECT * FROM recipe, recipeMealPlan WHERE recipe.ID = recipeMealPlan.recipeID AND recipeMealPlan.mealPlanID =  999;
@@ -118,3 +119,6 @@ delete from recipeMealPlan;
 --DELETE FROM food WHERE ID = 999;
 --
 --UPDATE mealPlan SET type = 0, mealDate = CURRENT_DATE WHERE ID = 999;
+=======
+
+>>>>>>> master

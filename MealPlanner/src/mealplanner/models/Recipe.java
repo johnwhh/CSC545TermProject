@@ -10,10 +10,10 @@ import java.util.HashMap;
 public class Recipe {
 
     public enum Category {
-        DESSERT,
-        SNACK,
-        APPETIZER,
-        ENTREE;
+        DESSERT,            // 0
+        SNACK,              // 1
+        APPETIZER,          // 2
+        ENTREE;             // 3
         
         @Override
         public String toString() {
@@ -25,9 +25,9 @@ public class Recipe {
     private String name;
     private String instructions;
     private Category category;
-    private HashMap<Integer, Object[]> foods;
+    private HashMap<Integer, FoodQuantity> foods;
 
-    public Recipe(int id, String name, String instructions, Category category, HashMap<Integer, Object[]> foods) {
+    public Recipe(int id, String name, String instructions, Category category, HashMap<Integer, FoodQuantity> foods) {
         this.id = id;
         this.name = name;
         this.instructions = instructions;
@@ -67,11 +67,11 @@ public class Recipe {
         this.category = category;
     }
 
-    public HashMap<Integer, Object[]> getFoods() {
+    public HashMap<Integer, FoodQuantity> getFoods() {
         return foods;
     }
 
-    public void setFoods(HashMap<Integer, Object[]> foods) {
+    public void setFoods(HashMap<Integer, FoodQuantity> foods) {
         this.foods = foods;
     }
 

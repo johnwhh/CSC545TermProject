@@ -9,9 +9,9 @@ import java.util.HashMap;
  */
 public class Fridge {
 
-    private HashMap<Integer, Object[]> foods;
+    private HashMap<Integer, FoodQuantity> foods;
 
-    public Fridge(HashMap<Integer, Object[]> foods) {
+    public Fridge(HashMap<Integer, FoodQuantity> foods) {
         this.foods = foods;
     }
 
@@ -19,11 +19,11 @@ public class Fridge {
         this.foods = new HashMap<>();
     }
 
-    public HashMap<Integer, Object[]> getFoods() {
+    public HashMap<Integer, FoodQuantity> getFoods() {
         return foods;
     }
 
-    public void setFoods(HashMap<Integer, Object[]> foods) {
+    public void setFoods(HashMap<Integer, FoodQuantity> foods) {
         this.foods = foods;
     }
 }
