@@ -7,14 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  script: |
-    - echo "package mealplanner;\n
-      public class Secrets {\n
-      public static final String USERNAME = "<username>";\n
-      public static final String PASSWORD = "<password>";\n
-      public static final String JDBCDRIVER = "oracle.jdbc.driver.OracleDriver";\n
-      public static final String JDBCURL = "jdbc:oracle:thin:@<ip_address>:<port>:<database>";\n
-      }" > MealPlanner/src/mealplanner/Secrets.java
+  
             
   build:
     runs-on: macos-latest
@@ -27,4 +20,12 @@ jobs:
           java-version: '16'
           distribution: 'adopt'
       - name: Build with Ant
-        run: ant -noinput -buildfile MealPlanner/build.xml
+        run: 
+          echo "package mealplanner;\n
+          public class Secrets {\n
+          public static final String USERNAME = "<username>";\n
+          public static final String PASSWORD = "<password>";\n
+          public static final String JDBCDRIVER = "oracle.jdbc.driver.OracleDriver";\n
+          public static final String JDBCURL = "jdbc:oracle:thin:@<ip_address>:<port>:<database>";\n
+          }" > MealPlanner/src/mealplanner/Secrets.java
+          ant -noinput -buildfile MealPlanner/build.xml
