@@ -67,3 +67,4 @@ CREATE TABLE recipeFood (
 );
 
 INSERT INTO fridge VALUES (0);
+Delete mealPlan;
