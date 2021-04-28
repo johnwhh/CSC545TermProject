@@ -125,7 +125,9 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
 
         JButton addFridgeFoodButton = new JButton();
         addFridgeFoodButton.addActionListener((ActionEvent e) -> {
-            setState(State.ADDING_FRIDGE_FOOD);
+            if (selectedFood != null) {
+                setState(State.ADDING_FRIDGE_FOOD);
+            }
         });
         addFridgeFoodButton.setText("Add food to fridge");
         addFridgeFoodButton.setBounds(0, 560, 150, 30);
@@ -207,7 +209,7 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
                     JOptionPane.showMessageDialog(null, "Food name must be no longer than 50 characters.", "Invalid Food Name Length", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
-                
+
                 foodModel.addFood(food);
 
                 updateFoods();
@@ -230,7 +232,7 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
                     JOptionPane.showMessageDialog(null, "Food name must be no longer than 50 characters.", "Invalid Food Name Length", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
-                
+
                 foodModel.updateFood(selectedFood.getId(), food);
                 updateFoods();
                 foodListView.reloadData();
