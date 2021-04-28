@@ -19,6 +19,7 @@ import mealplanner.views.ListView;
 import mealplanner.views.ListViewDataSource;
 import mealplanner.views.ListViewDelegate;
 import mealplanner.views.RecipeInformationView;
+import mealplanner.views.ConfirmationView;
 
 /**
  * @date 18-04-2021
@@ -34,12 +35,14 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     private ListView recipeListView;
     private ListView recipeInformationListView;
     private ListView ingredientAddListView;
+    private ConfirmationView confirmationView;
     private RecipeInformationView recipeInformationView;
     private RecipeIngredientAddView recipeIngredientAddView;
     private JButton deleteIngredientButton;
     private JButton createRecipeButton;
     private JButton deleteRecipeButton;
     private JButton backButton;
+    private JButton cancelButton;
     private JButton backToRecipeButton;
     private JButton confirmButton;
     private int recipeID = 0;
@@ -270,6 +273,12 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         recipeInformationView.add(backButton);
         backButton.setBounds(10, 550, 130, 40);
         backButton.addActionListener(this);
+        
+        
+        cancelButton = new JButton("Cancel");
+        recipeInformationView.add(cancelButton);
+        cancelButton.setBounds(10, 550, 130, 40);
+        cancelButton.addActionListener(this);
 
         deleteRecipeButton = new JButton("Delete Recipe");
         recipeInformationView.add(deleteRecipeButton);
@@ -315,16 +324,19 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
 
                 // For the main recipe list view
                 case recipeListViewName -> {
-
-                    backButton.setVisible(true);
+                    
+                    backButton.setVisible(false);
+                    cancelButton.setVisible(false);
 
                     // If the length == row then it is the add new recipe
                     if (recipeNames.length != row) {
                         createRecipeButton.setVisible(false);
                         deleteRecipeButton.setVisible(true);
+                        backButton.setVisible(true);
                     } else {
                         deleteRecipeButton.setVisible(false);
                         createRecipeButton.setVisible(true);
+                        cancelButton.setVisible(true);
                     }
 
                     // Tries to get the recipe ID and if it fails then it is add a new recipe
@@ -460,7 +472,18 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
             case "Save and Return" -> {
                 Recipe updatedRecipe = new Recipe(recipeID, recipeInformationView.getRecipeName(), recipeInformationView.getRecipeInstructions(), Recipe.Category.values()[recipeInformationView.getRecipeCategory()], recipeModel.getRecipes().get(recipeID).getFoods());
                 recipeModel.updateRecipe(recipeID, updatedRecipe);
-                goBackToRecipeList();
+                goBackToRecipeList(true);
+            }
+            case "Cancel" -> {
+                backButton.setVisible(false);
+                cancelButton.setVisible(false);
+                deleteIngredientButton.setEnabled(false);
+                deleteRecipeButton.setVisible(false);
+                deleteIngredientButton.setVisible(false);
+                createRecipeButton.setVisible(false);
+                recipeInformationView.setVisible(false);
+                recipeListView.reloadData();
+                recipeListView.setVisible(true);
             }
             case "Delete Ingredient" -> {
                 deleteIngredient(recipeID, selectedIngredientRow);
@@ -468,8 +491,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 recipeInformationListView.reloadData();
             }
             case "Delete Recipe" -> {
-                deleteRecipe(recipeID);
-                goBackToRecipeList();
+                showRemoveRecipeConfirmation(recipeID);
             }
             case "Create Recipe Base" -> {
                 String recipeName = recipeInformationView.getRecipeName();
@@ -489,7 +511,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 }
 
                 addRecipe(recipeName, recipeCategory, recipeInstructions);
-                goBackToRecipeList();
+                goBackToRecipeList(true);
             }
             case "Back To Recipe" -> {
                 goBackToRecipe();
@@ -520,7 +542,9 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         recipeInformationListView.reloadData();
     }
 
-    private void goBackToRecipeList() {
+    private void goBackToRecipeList(boolean reloadData) {
+        backButton.setVisible(false);
+        cancelButton.setVisible(false);
         deleteIngredientButton.setEnabled(false);
         deleteRecipeButton.setVisible(false);
         deleteIngredientButton.setVisible(false);
@@ -528,6 +552,24 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         recipeInformationView.setVisible(false);
         recipeListView.reloadData();
         recipeListView.setVisible(true);
-        recipeInformationListView.reloadData();
+        if (reloadData){
+            recipeInformationListView.reloadData();
+        } else {
+            confirmationView.setVisible(false);
+        }
+    }
+    
+    private void showRemoveRecipeConfirmation(int recipeID) {
+        confirmationView = new ConfirmationView("Are you sure you want to permanently delete this recipe?", (status) -> {
+            if (status == true) {
+                deleteRecipe(recipeID);
+            }
+            goBackToRecipeList(false);
+        });
+        confirmationView.setBounds(0, 0, getBounds().width, getBounds().height);
+        confirmationView.setBackground(Color.WHITE);
+        add(confirmationView);
+        confirmationView.setVisible(true);
+        recipeInformationView.setVisible(false);
     }
 }
