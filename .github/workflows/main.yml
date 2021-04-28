@@ -7,9 +7,18 @@ on:
     branches: [ master ]
 
 jobs:
+  script: |
+    - echo "package mealplanner;\n
+      public class Secrets {\n
+      public static final String USERNAME = "<username>";\n
+      public static final String PASSWORD = "<password>";\n
+      public static final String JDBCDRIVER = "oracle.jdbc.driver.OracleDriver";\n
+      public static final String JDBCURL = "jdbc:oracle:thin:@<ip_address>:<port>:<database>";\n
+      }" > MealPlanner/src/mealplanner/Secrets.java
+            
   build:
     runs-on: macos-latest
-
+    
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 16
