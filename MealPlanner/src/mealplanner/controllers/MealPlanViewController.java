@@ -87,6 +87,19 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
     public void updateModels() {
         mealPlanModel = new MealPlanModel();
         recipeModel = new RecipeModel();
+        
+        String tempDate = date;
+        if (tempDate == null) {
+            updateDates();
+            tempDate = recipeDates[0];
+        }
+        updateMealPlans(tempDate);
+        breakfastListView.reloadData();
+        lunchListView.reloadData();
+        dinnerListView.reloadData();
+        
+        if (recipeListView != null)
+            recipeListView.reloadData();
     }
 
     private void setState(State state) {
@@ -274,7 +287,7 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
                 MealPlanner.FRAME_HEIGHT - (TabbedViewController.PADDING));
         setBackground(Color.WHITE);
 
-        getDates();
+        updateDates();
 
     }
 
@@ -301,7 +314,7 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
         recipeNameList.toArray(recipeNames);
     }
 
-    public String[] getDates() {
+    public void updateDates() {
         List<String> dateList = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
@@ -315,7 +328,6 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
         }
         recipeDates = new String[dateList.size()];
         dateList.toArray(recipeDates);
-        return recipeDates;
     }
 
     private void updateMealPlans(String date) {

@@ -67,6 +67,8 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
     public void updateModels() {
         foodModel = new FoodModel();
         fridgeModel = new FridgeModel();
+        foodListView.reloadData();
+        fridgeFoodListView.reloadData();
     }
 
     private void setupPanel() {
@@ -154,7 +156,7 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
                 setState(State.EDITING_FOOD);
             }
         });
-        editFoodButton.setText("Edit food");
+        editFoodButton.setText("View food");
         editFoodButton.setBounds(240, 560, 90, 30);
         add(editFoodButton);
 
@@ -195,7 +197,12 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
     private void showAddFridgeFoodView() {
         QuantityView quantityView = new QuantityView("How many " + selectedFood.getName() + " would you like to add to your fridge?", (quantity) -> {
             if (quantity != -1) {
-                fridgeModel.addFood(selectedFood.getId(), quantity);
+                FoodQuantity oldFoodQuantity = fridgeModel.getFridge().getFoods().get(selectedFood.getId());
+                if (oldFoodQuantity != null) {
+                    fridgeModel.updateFoodQuantity(selectedFood.getId(), oldFoodQuantity.quantity + quantity);
+                } else {
+                    fridgeModel.addFood(selectedFood.getId(), quantity);
+                }
 
                 updateFridgeFoods();
                 fridgeFoodListView.reloadData();

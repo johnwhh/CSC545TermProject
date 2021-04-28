@@ -82,6 +82,9 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     public void updateModels() {
         recipeModel = new RecipeModel();
         foodModel = new FoodModel();
+        recipeListView.reloadData();
+        recipeInformationListView.reloadData();
+        ingredientAddListView.reloadData();
     }
 
     private void setupPanel() {
@@ -116,11 +119,11 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         if (searchTerm.equals("") == false) {
             recipes = recipeModel.getRecipes((recipe) -> {
                 if (searchFilter == SearchFilter.CATEGORY) {
-                    return recipe.getCategory().toString().startsWith(searchTerm);
+                    return recipe.getCategory().toString().toLowerCase().startsWith(searchTerm.toLowerCase());
                 }
 
                 for (FoodQuantity foodQuantity : recipe.getFoods().values()) {
-                    if (foodQuantity.food.getName().startsWith(searchTerm)) {
+                    if (foodQuantity.food.getName().toLowerCase().startsWith(searchTerm.toLowerCase())) {
                         return true;
                     }
                 }
@@ -165,9 +168,12 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     }
 
     // Gets an array of strings that has ingredient names 
-    private String[] getIngredientNames(int row) {
+    private String[] getIngredientNames(int recipeId) {
         var recipes = recipeModel.getRecipes();
-        var recipe = recipes.get(recipeIds[row]);
+        var recipe = recipes.get(recipeId);
+        if (recipe == null)
+            return new String[0];
+        
         var ingredients = recipe.getFoods();
         List<String> ingredientNameList = new ArrayList<>();
 
@@ -183,9 +189,12 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     }
 
     // Gets an array of ints that has ingredient quantities
-    private int[] getIngredientQuantities(int row) {
+    private int[] getIngredientQuantities(int recipeId) {
         var recipes = recipeModel.getRecipes();
-        var recipe = recipes.get(recipeIds[row]);
+        var recipe = recipes.get(recipeId);
+        if (recipe == null)
+            return new int[0];
+        
         var ingredients = recipe.getFoods();
         List<Integer> ingredientQuantityList = new ArrayList<>();
 
@@ -240,7 +249,6 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
 
         // Puts all the old ingredients in with the new one
         for (Entry<Integer, FoodQuantity> foodQuantity : recipe.getFoods().entrySet()) {
-            System.out.println("Adding food: " + foodQuantity.getValue().food + " (" + foodQuantity.getValue().quantity + ')');
             newIngredients.put(foodQuantity.getKey(), foodQuantity.getValue());
         }
 
@@ -499,11 +507,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 return recipeNames.length + 1;
             }
             case recipeInformationListViewName -> {
-                if (recipeNames.length != recipeID) {
-                    return getIngredientNames(recipeID).length + 1;
-                } else {
-                    return 1;
-                }
+                return getIngredientNames(recipeID).length + 1;
             }
             case ingredientAddListViewName -> {
                 String[] foodNames = getFoodNames();
@@ -527,9 +531,10 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 }
             }
             case recipeInformationListViewName -> {
-                if (recipeID != recipeNames.length) {
+                if (row < recipeNames.length) {
                     String[] ingredientNames = getIngredientNames(recipeID);
                     int[] ingredientQuantities = getIngredientQuantities(recipeID);
+
                     if (row == ingredientNames.length) {
                         return "Add a new ingredient.";
                     } else {
@@ -559,6 +564,8 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 goBackToRecipeList(true);
             }
             case "Cancel" -> {
+                searchTextField.setVisible(true);
+                searchFilterComboBox.setVisible(true);
                 backButton.setVisible(false);
                 cancelButton.setVisible(false);
                 deleteIngredientButton.setEnabled(false);

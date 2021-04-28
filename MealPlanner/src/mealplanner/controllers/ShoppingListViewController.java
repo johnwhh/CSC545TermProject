@@ -42,19 +42,10 @@ public class ShoppingListViewController extends JPanel implements ListViewDataSo
         setBackground(Color.WHITE);
 
         foodListView = new ListView("Your Shopping List");
-        foodListView.setBounds(0, 0, 440, getBounds().height - 150);
+        foodListView.setBounds(0, 0, 440, 590);
         foodListView.setBackground(Color.WHITE);
         foodListView.dataSource = this;
         add(foodListView);
-
-        JButton refreshButton = new JButton();
-        refreshButton.addActionListener((ActionEvent e) -> {
-            updateMissingFood();
-            foodListView.reloadData();
-        });
-        refreshButton.setText("Refresh");
-        refreshButton.setBounds((440 / 2) - 50, getBounds().height - 140, 100, 30);
-        add(refreshButton);
     }
 
     private void updateMissingFood() {
@@ -86,5 +77,7 @@ public class ShoppingListViewController extends JPanel implements ListViewDataSo
     public void updateModels() {
         fridgeModel = new FridgeModel();
         mealPlanModel = new MealPlanModel();
+        updateMissingFood();
+        foodListView.reloadData();
     }
 }
