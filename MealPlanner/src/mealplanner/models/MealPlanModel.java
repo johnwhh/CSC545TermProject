@@ -193,24 +193,6 @@ public class MealPlanModel {
             }
         });
 
-        // Update recipes in meal pleans
-//        mealPlans.get(id).getRecipes().forEach((recipeId, recipe) -> {
-//            DatabaseManager.updateData((connection) -> {
-//                try {
-//                    String statement = "UPDATE recipeMealPlan SET recipeID = ? WHERE mealPlanID = ?";
-//                    OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
-//                    preparedStatement.setInt(1, recipeId);
-//                    preparedStatement.setInt(2, id);
-//
-//                    return preparedStatement;
-//                } catch (SQLException e) {
-//                    System.out.println(e);
-//                }
-//
-//                return null;
-//            });
-//        });
-
         fetchMealPlans();
     }
 }

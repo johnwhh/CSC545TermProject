@@ -231,6 +231,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
 
         // Puts all the old ingredients in with the new one
         for (Entry<Integer, FoodQuantity> foodQuantity : recipe.getFoods().entrySet()) {
+            System.out.println("Adding food: " + foodQuantity.getValue().food + " (" + foodQuantity.getValue().quantity + ')');
             newIngredients.put(foodQuantity.getKey(), foodQuantity.getValue());
         }
         
@@ -437,6 +438,8 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                         recipeInformationListView.setVisible(false);
                         deleteIngredientButton.setVisible(false);
                     }
+                    
+                    recipeInformationListView.reloadData();
                 }
 
                 // If list view title is for information
