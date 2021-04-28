@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import mealplanner.DatabaseManager;
 import mealplanner.MealPlanner;
+import mealplanner.ModelUpdater;
 import mealplanner.models.*;
 import mealplanner.views.EditFoodView;
 import mealplanner.views.ConfirmationView;
@@ -24,7 +25,7 @@ import mealplanner.views.QuantityView;
  * @date 18-04-2021
  * @author johnholtzworth
  */
-public class FridgeViewController extends JPanel implements ListViewDataSource, ListViewDelegate {
+public class FridgeViewController extends JPanel implements ListViewDataSource, ListViewDelegate, ModelUpdater {
 
     private enum State {
         SHOWING_LIST,
@@ -37,8 +38,8 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
 
     private State state;
 
-    private final FridgeModel fridgeModel;
-    private final FoodModel foodModel;
+    private FridgeModel fridgeModel;
+    private FoodModel foodModel;
 
     private ListView fridgeFoodListView;
     private Food selectedFridgeFood = null;
@@ -60,6 +61,12 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
         updateFridgeFoods();
         setupPanel();
         setState(State.SHOWING_LIST);
+    }
+
+    @Override
+    public void updateModels() {
+        foodModel = new FoodModel();
+        fridgeModel = new FridgeModel();
     }
 
     private void setupPanel() {

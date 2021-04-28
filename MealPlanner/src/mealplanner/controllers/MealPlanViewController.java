@@ -21,13 +21,14 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mealplanner.DatabaseManager;
+import mealplanner.ModelUpdater;
 import mealplanner.views.ConfirmationView;
 
 /**
  * @date 18-04-2021
  * @author jessica haeckler, johnholtzworth
  */
-public class MealPlanViewController extends JPanel implements ListViewDelegate, ListViewDataSource {
+public class MealPlanViewController extends JPanel implements ListViewDelegate, ListViewDataSource, ModelUpdater {
 
     private enum State {
         SHOWING_MEAL_PLAN,
@@ -39,8 +40,8 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
     private Recipe selectedRecipe = null;
     private MealPlan selectedMealPlan = null;
 
-    private final MealPlanModel mealPlanModel;
-    private final RecipeModel recipeModel;
+    private MealPlanModel mealPlanModel;
+    private RecipeModel recipeModel;
 
     private ListView breakfastListView;
     private ListView lunchListView;
@@ -80,6 +81,12 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
         setupPanel();
         getRecipeList();
         setState(State.SHOWING_MEAL_PLAN);
+    }
+
+    @Override
+    public void updateModels() {
+        mealPlanModel = new MealPlanModel();
+        recipeModel = new RecipeModel();
     }
 
     private void setState(State state) {
@@ -171,7 +178,7 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
         recipeListView.dataSource = this;
         recipeListView.setPreferredSize(new Dimension(350, 400));
         add(recipeListView);
-        
+
         jButton6 = new javax.swing.JButton("Cancel");
         jButton6.setPreferredSize(new Dimension(200, 40));
         add(jButton6);
@@ -220,7 +227,7 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
                     }
                 }
             }
-            
+
             selectedMealPlan = null;
             selectedRecipe = null;
             setState(State.SHOWING_MEAL_PLAN);
@@ -230,7 +237,7 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
     private void showRemoveRecipeView() {
         ConfirmationView confirmationView = new ConfirmationView("Are you sure you want to delete this recipe?", (boolean status) -> {
             if (status == true) {
-                if(selectedRecipe != null) {
+                if (selectedRecipe != null) {
                     if (selectedMealPlan.getRecipes().size() == 1) {
                         mealPlanModel.removeMealPlan(selectedMealPlan.getId());
                     } else {

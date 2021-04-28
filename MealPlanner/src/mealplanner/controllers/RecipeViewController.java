@@ -18,6 +18,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import mealplanner.DatabaseManager;
 import mealplanner.MealPlanner;
+import mealplanner.ModelUpdater;
 import mealplanner.models.*;
 import mealplanner.views.RecipeIngredientAddView;
 import mealplanner.views.ListView;
@@ -30,20 +31,20 @@ import mealplanner.views.ConfirmationView;
  * @date 18-04-2021
  * @author Matthew, johnholtzworth
  */
-public class RecipeViewController extends JPanel implements ListViewDelegate, ListViewDataSource, ActionListener {
-    
+public class RecipeViewController extends JPanel implements ListViewDelegate, ListViewDataSource, ActionListener, ModelUpdater {
+
     enum SearchFilter {
         INGREDIENT,
         CATEGORY;
-        
+
         @Override
         public String toString() {
             return name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
         }
     }
-    
-    private final RecipeModel recipeModel;
-    private final FoodModel foodModel;
+
+    public RecipeModel recipeModel;
+    private FoodModel foodModel;
     private final String recipeListViewName = "Your Recipes";
     private final String recipeInformationListViewName = "Ingredients Needed";
     private final String ingredientAddListViewName = "Ingredient Options";
@@ -66,17 +67,23 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     private int selectedIngredientRow = 0;
     private String selectedFood = "";
     private int[] recipeIds;
-    
+
     private String searchTerm = "";
     private SearchFilter searchFilter = SearchFilter.INGREDIENT;
-    
+
     public RecipeViewController() {
         this.recipeModel = new RecipeModel();
         this.foodModel = new FoodModel();
-        
+
         setupPanel();
     }
-    
+
+    @Override
+    public void updateModels() {
+        recipeModel = new RecipeModel();
+        foodModel = new FoodModel();
+    }
+
     private void setupPanel() {
         setLayout(null);
         setBounds(0,
@@ -111,19 +118,19 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 if (searchFilter == SearchFilter.CATEGORY) {
                     return recipe.getCategory().toString().startsWith(searchTerm);
                 }
-                
+
                 for (FoodQuantity foodQuantity : recipe.getFoods().values()) {
                     if (foodQuantity.food.getName().startsWith(searchTerm)) {
                         return true;
                     }
                 }
-                
+
                 return false;
             });
         } else {
             recipes = recipeModel.getRecipes();
         }
-        
+
         List<String> recipeNameList = new ArrayList<>();
         recipeIds = new int[recipes.size()];
         int i = 0;
@@ -236,7 +243,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
             System.out.println("Adding food: " + foodQuantity.getValue().food + " (" + foodQuantity.getValue().quantity + ')');
             newIngredients.put(foodQuantity.getKey(), foodQuantity.getValue());
         }
-        
+
         newIngredients.put(newFood.getId(), new FoodQuantity(newFood, quantity));
         // Updates the recipe
         Recipe newRecipe = new Recipe(recipe.getId(), recipe.getName(), recipe.getInstructions(), recipe.getCategory(), newIngredients);
@@ -298,17 +305,17 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
             public void changedUpdate(DocumentEvent e) {
                 update();
             }
-            
+
             @Override
             public void removeUpdate(DocumentEvent e) {
                 update();
             }
-            
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 update();
             }
-            
+
             public void update() {
                 searchTerm = searchTextField.getText();
                 recipeListView.reloadData();
@@ -316,7 +323,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         });
         add(searchTextField);
         searchTextField.setVisible(true);
-        
+
         searchFilterComboBox = new JComboBox();
         searchFilterComboBox.setModel(new DefaultComboBoxModel<>(SearchFilter.values()));
         searchFilterComboBox.addActionListener((e) -> {
@@ -326,7 +333,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         searchFilterComboBox.setBounds(305, 0, 135, 30);
         add(searchFilterComboBox);
         searchFilterComboBox.setVisible(true);
-        
+
         recipeListView = new ListView(recipeListViewName);
         recipeListView.delegate = this;
         recipeListView.dataSource = this;
@@ -343,27 +350,27 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         recipeInformationListView.dataSource = this;
         recipeInformationListView.setBounds(0, 320, 440, 200);
         recipeInformationView.add(recipeInformationListView);
-        
+
         backButton = new JButton("Save and Return");
         recipeInformationView.add(backButton);
         backButton.setBounds(10, 550, 130, 40);
         backButton.addActionListener(this);
-        
+
         cancelButton = new JButton("Cancel");
         recipeInformationView.add(cancelButton);
         cancelButton.setBounds(10, 550, 130, 40);
         cancelButton.addActionListener(this);
-        
+
         deleteRecipeButton = new JButton("Delete Recipe");
         recipeInformationView.add(deleteRecipeButton);
         deleteRecipeButton.setBounds(315, 550, 120, 40);
         deleteRecipeButton.addActionListener(this);
-        
+
         createRecipeButton = new JButton("Create Recipe Base");
         recipeInformationView.add(createRecipeButton);
         createRecipeButton.setBounds(160, 325, 150, 40);
         createRecipeButton.addActionListener(this);
-        
+
         deleteIngredientButton = new JButton("Delete Ingredient");
         recipeInformationView.add(deleteIngredientButton);
         deleteIngredientButton.setEnabled(false);
@@ -378,18 +385,18 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         ingredientAddListView.dataSource = this;
         ingredientAddListView.setBounds(0, 0, 440, 200);
         recipeIngredientAddView.add(ingredientAddListView);
-        
+
         confirmButton = new JButton("Confirm");
         recipeIngredientAddView.add(confirmButton);
         confirmButton.setBounds(160, 325, 130, 40);
         confirmButton.addActionListener(this);
-        
+
         backToRecipeButton = new JButton("Back To Recipe");
         recipeIngredientAddView.add(backToRecipeButton);
         backToRecipeButton.setBounds(10, 550, 130, 40);
         backToRecipeButton.addActionListener(this);
     }
-    
+
     @Override
     public void didSelectRow(ListView listView, int row) {
         if (row >= 0) {
@@ -441,7 +448,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                         recipeInformationListView.setVisible(false);
                         deleteIngredientButton.setVisible(false);
                     }
-                    
+
                     recipeInformationListView.reloadData();
                 }
 
@@ -474,7 +481,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 case ingredientAddListViewName -> {
                     String[] foods = getFoodNames();
                     selectedFood = foods[row];
-                    
+
                     confirmButton.setEnabled(true);
                 }
                 default -> {
@@ -483,7 +490,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
             }
         }
     }
-    
+
     @Override
     public int numberOfRows(ListView listView) {
         String[] recipeNames = getRecipeNames();
@@ -507,7 +514,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
             }
         }
     }
-    
+
     @Override
     public String contentsOfRow(ListView listView, int row) {
         String[] recipeNames = getRecipeNames();
@@ -541,7 +548,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
             }
         }
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
@@ -572,21 +579,21 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
             }
             case "Create Recipe Base" -> {
                 String recipeName = recipeInformationView.getRecipeName();
-                
+
                 int recipeCategoryIndex = recipeInformationView.getRecipeCategory();
                 Recipe.Category recipeCategory = Recipe.Category.values()[recipeCategoryIndex];
                 String recipeInstructions = recipeInformationView.getRecipeInstructions();
-                
+
                 if (recipeName.length() > 50) {
                     JOptionPane.showMessageDialog(null, "Recipe name must be no longer than 50 characters.", "Invalid Recipe Name Length", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
-                
+
                 if (recipeInstructions.length() > 255) {
                     JOptionPane.showMessageDialog(null, "Instructions must be no longer than 255 characters.", "Invalid Instructions Length", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
-                
+
                 addRecipe(recipeName, recipeCategory, recipeInstructions);
                 goBackToRecipeList(true);
             }
@@ -606,7 +613,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 System.out.println("Action " + action + " not registered.");
         }
     }
-    
+
     private void goBackToRecipe() {
         deleteIngredientButton.setEnabled(false);
         deleteIngredientButton.setVisible(true);
@@ -618,7 +625,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         recipeInformationView.setVisible(true);
         recipeInformationListView.reloadData();
     }
-    
+
     private void goBackToRecipeList(boolean reloadData) {
         backButton.setVisible(false);
         cancelButton.setVisible(false);
@@ -637,7 +644,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
             confirmationView.setVisible(false);
         }
     }
-    
+
     private void showRemoveRecipeConfirmation(int recipeID) {
         confirmationView = new ConfirmationView("Are you sure you want to permanently delete this recipe?", (status) -> {
             if (status == true) {

@@ -6,6 +6,8 @@ import java.util.List;
 import static junit.framework.Assert.*;
 import mealplanner.DatabaseManager;
 import mealplanner.models.*;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -13,8 +15,16 @@ import org.junit.Test;
  * @author johnholtzworth
  */
 public class RecipeTest {
-    
+
     public RecipeTest() {
+    }
+
+    @Before
+    public void setUp() {
+    }
+
+    @After
+    public void tearDown() {
     }
 
     @Test

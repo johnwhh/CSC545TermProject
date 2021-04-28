@@ -1,9 +1,9 @@
 // This project has no license.
 package mealplanner.models;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 /**
@@ -24,6 +24,13 @@ public class ShoppingList {
         HashMap<Integer, FoodQuantity> missingFoodQuantities = new HashMap<>();
 
         for (MealPlan mealPlan : mealPlans) {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String today = formatter.format(new Date());
+            String mealPlanDate = formatter.format(mealPlan.getDate());
+            if (mealPlan.getDate().before(new Date()) && !(today.equals(mealPlanDate))) {
+                continue;
+            }
+
             for (Recipe recipe : mealPlan.getRecipes().values()) {
                 for (Entry<Integer, FoodQuantity> foodQuantity : recipe.getFoods().entrySet()) {
                     FoodQuantity existingFoodQuantity = new FoodQuantity(foodQuantity.getValue().food, 0);
