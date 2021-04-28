@@ -28,7 +28,7 @@ public class FoodTest {
     }
 
     @Test
-    public void testGetAvailableId() {
+    public void testGetAvailableIdWithGap() {
         List<Integer> usedIds = new ArrayList<>();
         usedIds.add(0);
         usedIds.add(2);
@@ -38,4 +38,15 @@ public class FoodTest {
         assertEquals(1, id);
     }
 
+    @Test
+    public void testGetAvailableId() {
+        List<Integer> usedIds = new ArrayList<>();
+        usedIds.add(0);
+        usedIds.add(1);
+        usedIds.add(2);
+
+        int id = DatabaseManager.getAvailableId(Food.class, usedIds);
+
+        assertEquals(3, id);
+    }
 }
