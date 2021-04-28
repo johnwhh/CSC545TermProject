@@ -73,6 +73,7 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
 
     public MealPlanViewController() {
         this.mealPlanModel = new MealPlanModel();
@@ -93,6 +94,7 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
                 showMealPlanList();
             }
             case ADDING_RECIPE -> {
+                selectedRecipe = null;
                 showAddRecipeView();
             }
             case REMOVING_RECIPE -> {
@@ -163,15 +165,22 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
     }
 
     private void showAddRecipeView() {
+        System.out.println("here: ");
         getRecipeList();
         recipeListView = new ListView("Your Recipies");
         recipeListView.delegate = this;
         recipeListView.dataSource = this;
         recipeListView.setPreferredSize(new Dimension(350, 400));
         add(recipeListView);
-
+        
+        jButton6 = new javax.swing.JButton("Cancel");
+        jButton6.setPreferredSize(new Dimension(200, 40));
+        add(jButton6);
+        jButton6.addActionListener((java.awt.event.ActionEvent evt) -> {
+            setState(State.SHOWING_MEAL_PLAN);
+        });
         jButton5 = new javax.swing.JButton("Add Recipe");
-        jButton5.setPreferredSize(new Dimension(350, 40));
+        jButton5.setPreferredSize(new Dimension(200, 40));
         add(jButton5);
         jButton5.addActionListener((java.awt.event.ActionEvent evt) -> {
             if (selectedRecipe != null) {
@@ -222,22 +231,24 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
     private void showRemoveRecipeView() {
         ConfirmationView confirmationView = new ConfirmationView("Are you sure you want to delete this recipe?", (boolean status) -> {
             if (status == true) {
-                if (selectedMealPlan.getRecipes().size() == 1) {
-                    mealPlanModel.removeMealPlan(selectedMealPlan.getId());
-                } else {
-                    HashMap<Integer, Recipe> newRecipes = new HashMap<>(selectedMealPlan.getRecipes());
-                    newRecipes.remove(selectedRecipe.getId());
-                    mealPlanModel.updateMealPlan(selectedMealPlan.getId(), new MealPlan(
-                            selectedMealPlan.getId(),
-                            selectedMealPlan.getType(),
-                            selectedMealPlan.getDate(),
-                            newRecipes
-                    ));
+                if(selectedRecipe != null) {
+                    if (selectedMealPlan.getRecipes().size() == 1) {
+                        mealPlanModel.removeMealPlan(selectedMealPlan.getId());
+                    } else {
+                        HashMap<Integer, Recipe> newRecipes = new HashMap<>(selectedMealPlan.getRecipes());
+                        newRecipes.remove(selectedRecipe.getId());
+                        mealPlanModel.updateMealPlan(selectedMealPlan.getId(), new MealPlan(
+                                selectedMealPlan.getId(),
+                                selectedMealPlan.getType(),
+                                selectedMealPlan.getDate(),
+                                newRecipes
+                        ));
 
-                    updateMealPlans(date);
-                    breakfastListView.reloadData();
-                    lunchListView.reloadData();
-                    dinnerListView.reloadData();
+                        updateMealPlans(date);
+                        breakfastListView.reloadData();
+                        lunchListView.reloadData();
+                        dinnerListView.reloadData();
+                    }
                 }
             }
 
@@ -374,32 +385,30 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
 
     @Override
     public void didSelectRow(ListView listView, int row) {
-        Recipe recipe;
 
         switch (listView.title) {
             case "Breakfast" -> {
-                recipe = (Recipe) recipeList.get(breakfastRecipeIds[row]);
+                selectedRecipe = (Recipe) recipeList.get(breakfastRecipeIds[row]);
                 selectedMealPlan = (MealPlan) breakfastMealPlans.get(breakfastMealPlanId);
                 lunchListView.deselect();
                 dinnerListView.deselect();
             }
             case "Lunch" -> {
-                recipe = (Recipe) recipeList.get(lunchRecipeIds[row]);
+                selectedRecipe = (Recipe) recipeList.get(lunchRecipeIds[row]);
                 selectedMealPlan = (MealPlan) lunchMealPlans.get(lunchMealPlanId);
                 breakfastListView.deselect();
                 dinnerListView.deselect();
             }
             case "Dinner" -> {
-                recipe = (Recipe) recipeList.get(dinnerRecipeIds[row]);
+                selectedRecipe = (Recipe) recipeList.get(dinnerRecipeIds[row]);
                 selectedMealPlan = (MealPlan) dinnerMealPlans.get(dinnerMealPlanId);
                 lunchListView.deselect();
                 breakfastListView.deselect();
             }
             default -> {
-                recipe = (Recipe) recipeList.get(recipeIds[row]);
+                selectedRecipe = (Recipe) recipeList.get(recipeIds[row]);
             }
         }
-        selectedRecipe = recipe;
     }
 
     @Override
