@@ -52,7 +52,6 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
     private HashMap<Integer, MealPlan> lunchMealPlans;
     private HashMap<Integer, MealPlan> dinnerMealPlans;
     private HashMap<Integer, Recipe> recipeList;
-    private Set<Integer> mealPlanIds;
     private int[] recipeIds;
     private int[] breakfastRecipeIds;
     private int[] lunchRecipeIds;
@@ -63,7 +62,6 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
 
     private String mealType;
     private String date = null;
-    private Recipe[] recipes;
     private String[] dinnerRecipeNames;
     private String[] lunchRecipeNames;
     private String[] breakfastRecipeNames;
@@ -149,11 +147,7 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
         });
         jButton2.addActionListener((java.awt.event.ActionEvent evt) -> {
             mealType = "lunch";
-            System.out.println("lunchMealPlanId: " + lunchMealPlanId);
-//            System.out.println("current selectedMealPlan.id: " + selectedMealPlan.getId());
-
             selectedMealPlan = (MealPlan) lunchMealPlans.get(lunchMealPlanId);
-//            System.out.println("new selectedMealPlan.id: " + selectedMealPlan.getId());
             setState(State.ADDING_RECIPE);
         });
         jButton3.addActionListener((java.awt.event.ActionEvent evt) -> {
@@ -182,9 +176,6 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
         jButton5.addActionListener((java.awt.event.ActionEvent evt) -> {
             if (selectedRecipe != null) {
                 if (selectedMealPlan != null) {
-                    mealPlanModel.getMealPlans().get(selectedMealPlan.getId()).getRecipes().forEach((id, recipe) -> {
-                        System.out.println("Recipe Start in Model: " + recipe);
-                    });
                     HashMap<Integer, Recipe> newRecipes = new HashMap<>(selectedMealPlan.getRecipes());
                     newRecipes.put(selectedRecipe.getId(), selectedRecipe);
                     mealPlanModel.updateMealPlan(selectedMealPlan.getId(), new MealPlan(
@@ -193,26 +184,19 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
                             selectedMealPlan.getDate(),
                             newRecipes
                     ));
-                    mealPlanModel.getMealPlans().get(selectedMealPlan.getId()).getRecipes().forEach((id, recipe) -> {
-                        System.out.println("Recipe After in Model: " + recipe);
-                    });
                 } else {
                     try {
                         Date mealDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
                         HashMap mealRecipes = new HashMap<Integer, Recipe>();
-                        System.out.println("Adding recipe to new meal plan: " + selectedRecipe.getName());
                         mealRecipes.put(selectedRecipe.getId(), selectedRecipe);
                         int id = DatabaseManager.getAvailableId(MealPlan.class, null);
-                        System.out.println("newId: " + id);
                         switch (mealType) {
                             case "breakfast":
-                                System.out.println("Making breakfast");
                                 MealPlan newMealPlan = new MealPlan(id, MealPlan.Type.BREAKFAST, mealDate, mealRecipes);
                                 mealPlanModel.addMealPlan(newMealPlan);
                                 breakfastListView.reloadData();
                                 break;
                             case "lunch":
-                                System.out.println("Making lunch");
                                 newMealPlan = new MealPlan(id, MealPlan.Type.LUNCH, mealDate, mealRecipes);
                                 mealPlanModel.addMealPlan(newMealPlan);
                                 lunchListView.reloadData();
@@ -241,10 +225,6 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
                 if (selectedMealPlan.getRecipes().size() == 1) {
                     mealPlanModel.removeMealPlan(selectedMealPlan.getId());
                 } else {
-                    System.out.println("Removing recipe: " + selectedRecipe.getId());
-//                    selectedMealPlan.getRecipes().remove(selectedRecipe.getId());
-//                    mealPlanModel.updateMealPlan(selectedMealPlan.getId(), selectedMealPlan);
-
                     HashMap<Integer, Recipe> newRecipes = new HashMap<>(selectedMealPlan.getRecipes());
                     newRecipes.remove(selectedRecipe.getId());
                     mealPlanModel.updateMealPlan(selectedMealPlan.getId(), new MealPlan(
@@ -275,7 +255,7 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
                 0,
                 MealPlanner.FRAME_WIDTH - (TabbedViewController.PADDING * 2),
                 MealPlanner.FRAME_HEIGHT - (TabbedViewController.PADDING));
-        setBackground(Color.gray);
+        setBackground(Color.WHITE);
 
         getDates();
 
@@ -323,7 +303,6 @@ public class MealPlanViewController extends JPanel implements ListViewDelegate, 
 
     private void updateMealPlans(String date) {
         this.date = date;
-        mealPlanIds = mealPlanModel.getMealPlans().keySet();
         List<String> recipeNameList = new ArrayList<>();
         breakfastMealPlans = mealPlanModel.getMealPlans((mealPlan) -> {
             return mealPlan.getType().toString().equals(MealPlan.Type.BREAKFAST.toString()) && mealPlan.getDate().toString().equals(date);
