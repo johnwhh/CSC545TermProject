@@ -1,4 +1,4 @@
-name: JUnit 4 CI
+name: tests
 
 on:
   push:
