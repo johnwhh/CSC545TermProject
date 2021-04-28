@@ -60,6 +60,8 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     private JButton cancelButton;
     private JButton backToRecipeButton;
     private JButton confirmButton;
+    private JComboBox searchFilterComboBox;
+    private JTextField searchTextField;
     private int recipeID = 0;
     private int selectedIngredientRow = 0;
     private String selectedFood = "";
@@ -289,7 +291,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
 
     // Creates the recipe list view to display
     private void createRecipeListView() {
-        JTextField searchTextField = new JTextField();
+        searchTextField = new JTextField();
         searchTextField.setBounds(0, 0, 300, 30);
         searchTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -315,7 +317,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         add(searchTextField);
         searchTextField.setVisible(true);
         
-        JComboBox searchFilterComboBox = new JComboBox();
+        searchFilterComboBox = new JComboBox();
         searchFilterComboBox.setModel(new DefaultComboBoxModel<>(SearchFilter.values()));
         searchFilterComboBox.addActionListener((e) -> {
             searchFilter = (SearchFilter) searchFilterComboBox.getSelectedItem();
@@ -396,7 +398,8 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
 
                 // For the main recipe list view
                 case recipeListViewName -> {
-                    
+                    searchTextField.setVisible(false);
+                    searchFilterComboBox.setVisible(false);
                     backButton.setVisible(false);
                     cancelButton.setVisible(false);
 
@@ -626,6 +629,8 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
         recipeInformationView.setVisible(false);
         recipeListView.reloadData();
         recipeListView.setVisible(true);
+        searchFilterComboBox.setVisible(true);
+        searchTextField.setVisible(true);
         if (reloadData) {
             recipeInformationListView.reloadData();
         } else {
