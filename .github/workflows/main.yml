@@ -1,0 +1,31 @@
+name: tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  
+            
+  build:
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 16
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16'
+          distribution: 'adopt'
+      - name: Build with Ant
+        run: 
+          echo "package mealplanner;\n
+          public class Secrets {\n
+          public static final String USERNAME = \"<username>\";\n
+          public static final String PASSWORD = \"<password>\";\n
+          public static final String JDBCDRIVER = \"oracle.jdbc.driver.OracleDriver\";\n
+          public static final String JDBCURL = \"jdbc:oracle:thin:@<ip_address>:<port>:<database>\";\n
+          }" > MealPlanner/src/mealplanner/Secrets.java
+          ant -noinput -buildfile MealPlanner/build.xml

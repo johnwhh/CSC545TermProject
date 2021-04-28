@@ -1,4 +1,4 @@
-# CSC 545 Term Project
+# CSC 545 Term Project [![tests](https://github.com/johnwhh/CSC545TermProject/actions/workflows/main.yml/badge.svg)](https://github.com/johnwhh/CSC545TermProject/actions/workflows/main.yml)
 This is project is the work of John Holtzworth, Matthew Abney and Jessica Haeckler.
 ## Setup
 ### Initializing the database
