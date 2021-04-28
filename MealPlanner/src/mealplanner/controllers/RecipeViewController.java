@@ -385,6 +385,7 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 case ingredientAddListViewName -> {
                     String[] foods = getFoodNames();
                     selectedFood = foods[row];
+
                     confirmButton.setEnabled(true);
                 }
                 default -> {

@@ -2,22 +2,23 @@ package mealplanner.views;
 
 import javax.swing.DefaultComboBoxModel;
 import mealplanner.controllers.MealPlanViewController;
-import mealplanner.models.MealPlan;
+
 /**
  * @author jessica haeckler
  */
 public class MealPlanListView extends javax.swing.JPanel {
+
     public MealPlanViewController meal;
     public String[] dates;
-    
+
     public MealPlanListView(String[] dates) {
-        System.out.println(dates[0]);
         this.dates = dates;
         initComponents();
     }
-public String getComboSelection() {
-      return (String) jComboBox1.getSelectedItem();
-   }
+
+    public String getComboSelection() {
+        return (String) jComboBox1.getSelectedItem();
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
