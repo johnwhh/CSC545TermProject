@@ -179,24 +179,6 @@ public class RecipeModel {
             }
         });
 
-        // Update quantities of foods already in the recipe
-        recipes.get(id).getFoods().forEach((foodId, foodQuantity) -> {
-            DatabaseManager.updateData((connection) -> {
-                try {
-                    String statement = "UPDATE recipeFood SET recipeID = ?, foodID = ?, quantity = ?";
-                    OraclePreparedStatement preparedStatement = (OraclePreparedStatement) connection.prepareStatement(statement);
-                    preparedStatement.setInt(1, recipe.getId());
-                    preparedStatement.setInt(2, foodId);
-                    preparedStatement.setInt(3, recipe.getFoods().get(foodId).quantity);
-                    return preparedStatement;
-                } catch (SQLException e) {
-                    System.out.println("Update quantities error: " + e);
-                }
-
-                return null;
-            });
-        });
-
         fetchRecipes();
     }
 }
