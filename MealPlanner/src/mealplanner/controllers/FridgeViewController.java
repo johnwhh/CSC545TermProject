@@ -250,6 +250,10 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
                 foodModel.updateFood(selectedFood.getId(), food);
                 updateFoods();
                 foodListView.reloadData();
+                
+                fridgeModel = new FridgeModel();
+                updateFridgeFoods();
+                fridgeFoodListView.reloadData();
             }
 
             selectedFood = null;
@@ -268,6 +272,7 @@ public class FridgeViewController extends JPanel implements ListViewDataSource, 
                 updateFoods();
                 foodListView.reloadData();
 
+                fridgeModel = new FridgeModel();
                 updateFridgeFoods();
                 fridgeFoodListView.reloadData();
             }

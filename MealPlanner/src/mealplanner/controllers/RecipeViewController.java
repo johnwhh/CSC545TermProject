@@ -171,9 +171,10 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     private String[] getIngredientNames(int recipeId) {
         var recipes = recipeModel.getRecipes();
         var recipe = recipes.get(recipeId);
-        if (recipe == null)
+        if (recipe == null) {
             return new String[0];
-        
+        }
+
         var ingredients = recipe.getFoods();
         List<String> ingredientNameList = new ArrayList<>();
 
@@ -192,9 +193,10 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
     private int[] getIngredientQuantities(int recipeId) {
         var recipes = recipeModel.getRecipes();
         var recipe = recipes.get(recipeId);
-        if (recipe == null)
+        if (recipe == null) {
             return new int[0];
-        
+        }
+
         var ingredients = recipe.getFoods();
         List<Integer> ingredientQuantityList = new ArrayList<>();
 
@@ -531,17 +533,17 @@ public class RecipeViewController extends JPanel implements ListViewDelegate, Li
                 }
             }
             case recipeInformationListViewName -> {
-                if (row < recipeNames.length) {
-                    String[] ingredientNames = getIngredientNames(recipeID);
-                    int[] ingredientQuantities = getIngredientQuantities(recipeID);
+                String[] ingredientNames = getIngredientNames(recipeID);
+                int[] ingredientQuantities = getIngredientQuantities(recipeID);
 
-                    if (row == ingredientNames.length) {
-                        return "Add a new ingredient.";
-                    } else {
-                        return Integer.toString(ingredientQuantities[row]) + " of " + ingredientNames[row];
-                    }
-                } else {
+                if (ingredientNames.length == 0 || ingredientQuantities.length == 0) {
                     return "Add a new ingredient.";
+                }
+
+                if (row == ingredientNames.length) {
+                    return "Add a new ingredient.";
+                } else {
+                    return Integer.toString(ingredientQuantities[row]) + " of " + ingredientNames[row];
                 }
             }
             case ingredientAddListViewName -> {
