@@ -29,3 +29,5 @@ Due to some restrictions, whether it be of the technologies or our collective kn
 4. Nutritional values must be whole numbers.
 5. All numbers, including quantities, must be less than 1,000.
 6. Only one user is supported per database. This could be scaled at some point in the future.
+## Note
+The target JDK version of this application is JDK 16.
