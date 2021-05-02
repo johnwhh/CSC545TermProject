@@ -28,7 +28,7 @@ public class ShoppingList {
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             String today = formatter.format(new Date());
             String mealPlanDate = formatter.format(mealPlan.getDate());
-            if (mealPlan.getDate().before(new Date()) && !(today.equals(mealPlanDate))) {
+            if (mealPlan.getDate().before(new Date())) {
                 continue;
             }
 
