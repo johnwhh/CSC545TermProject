@@ -1,10 +1,11 @@
 // This project has no license.
+// Created on: 16-04-2021
 package mealplanner.models;
 
 import java.util.Objects;
 
 /**
- * @date 16-04-2021
+ *
  * @author johnholtzworth
  */
 public class Food {

@@ -1,4 +1,5 @@
 // This project has no license.
+// Created on: 18-04-2021
 package mealplanner.controllers;
 
 import java.awt.Color;
@@ -28,7 +29,7 @@ import mealplanner.views.RecipeInformationView;
 import mealplanner.views.ConfirmationView;
 
 /**
- * @date 18-04-2021
+ *
  * @author Matthew, johnholtzworth
  */
 public class RecipeViewController extends JPanel implements ListViewDelegate, ListViewDataSource, ActionListener, ModelUpdater {

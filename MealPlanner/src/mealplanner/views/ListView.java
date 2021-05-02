@@ -1,10 +1,11 @@
 // This project has no license.
+// Created on: 21-04-2021
 package mealplanner.views;
 
 import javax.swing.AbstractListModel;
 
 /**
- * @date 21-04-2021
+ *
  * @author johnholtzworth
  */
 public class ListView extends javax.swing.JPanel {

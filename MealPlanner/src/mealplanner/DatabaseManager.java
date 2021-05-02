@@ -1,4 +1,5 @@
 // This project has no license.
+// Created on: 18-04-2021
 package mealplanner;
 
 import java.sql.Connection;
@@ -14,7 +15,7 @@ import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * @date 18-04-2021
+ *
  * @author johnholtzworth
  */
 public class DatabaseManager {

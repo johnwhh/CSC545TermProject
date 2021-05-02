@@ -1,4 +1,5 @@
 // This project has no license.
+// Created on: 21-04-2021
 package mealplanner.views;
 
 import javax.swing.DefaultComboBoxModel;
@@ -6,7 +7,7 @@ import mealplanner.FoodFunction;
 import mealplanner.models.Food;
 
 /**
- * @date 21-04-2021
+ *
  * @author johnholtzworth
  */
 public class EditFoodView extends javax.swing.JPanel {

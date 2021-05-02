@@ -1,10 +1,11 @@
 // This project has no license.
+// Created on: 24-04-2021
 package mealplanner.views;
 
 import mealplanner.BooleanFunction;
 
 /**
- * @date 24-04-2021
+ *
  * @author johnholtzworth
  */
 public class ConfirmationView extends javax.swing.JPanel {
