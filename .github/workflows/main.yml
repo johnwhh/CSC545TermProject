@@ -19,7 +19,8 @@ jobs:
         with:
           java-version: '16'
           distribution: 'adopt'
-      - name: Build with Ant
+          
+      - name: Create Secrets.java template
         run: 
           echo "package mealplanner;\n
           public class Secrets {\n
@@ -28,4 +29,6 @@ jobs:
           public static final String JDBCDRIVER = \"oracle.jdbc.driver.OracleDriver\";\n
           public static final String JDBCURL = \"jdbc:oracle:thin:@<ip_address>:<port>:<database>\";\n
           }" > MealPlanner/src/mealplanner/Secrets.java
-          ant -noinput -buildfile MealPlanner/build.xml
+          
+      - name: Build and Test with Ant
+        run: ant -noinput -buildfile MealPlanner/build.xml
