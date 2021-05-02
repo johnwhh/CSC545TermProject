@@ -1,8 +1,9 @@
 // This project has no license.
+// Created on: 21-04-2021
 package mealplanner.views;
 
 /**
- * @date 21-04-2021
+ *
  * @author johnholtzworth
  */
 public interface ListViewDataSource {

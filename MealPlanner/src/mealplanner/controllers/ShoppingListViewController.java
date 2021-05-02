@@ -1,4 +1,5 @@
 // This project has no license.
+// Created on: 18-04-2021
 package mealplanner.controllers;
 
 import java.awt.Color;
@@ -14,7 +15,7 @@ import mealplanner.views.ListView;
 import mealplanner.views.ListViewDataSource;
 
 /**
- * @date 18-04-2021
+ *
  * @author johnholtzworth
  */
 public class ShoppingListViewController extends JPanel implements ListViewDataSource, ModelUpdater {

@@ -1,15 +1,15 @@
 // This project has no license.
+// Created on: 16-04-2021
 package mealplanner.controllers;
 
 import javax.swing.JPanel;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import mealplanner.MealPlanner;
 import mealplanner.ModelUpdater;
 
 /**
- * @date 16-04-2021
+ *
  * @author johnholtzworth
  */
 public class TabbedViewController extends JTabbedPane {

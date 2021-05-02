@@ -1,8 +1,9 @@
 // This project has no license.
+// Created on: 18-04-2021
 package mealplanner;
 
 /**
- * @date 18-04-2021
+ *
  * @author Matthew
  */
 import java.sql.Connection;

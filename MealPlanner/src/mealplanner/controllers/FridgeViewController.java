@@ -1,4 +1,5 @@
 // This project has no license.
+// Created on: 18-04-2021
 package mealplanner.controllers;
 
 import java.awt.Color;
@@ -22,7 +23,7 @@ import mealplanner.views.ListViewDelegate;
 import mealplanner.views.QuantityView;
 
 /**
- * @date 18-04-2021
+ *
  * @author johnholtzworth
  */
 public class FridgeViewController extends JPanel implements ListViewDataSource, ListViewDelegate, ModelUpdater {

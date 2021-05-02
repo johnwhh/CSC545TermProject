@@ -1,4 +1,5 @@
 // This project has no license.
+// Created on: 16-04-2021
 package mealplanner;
 
 import java.awt.Color;
@@ -7,7 +8,7 @@ import javax.swing.JFrame;
 import mealplanner.controllers.TabbedViewController;
 
 /**
- * @date 16-04-2021
+ *
  * @author johnholtzworth
  */
 public class MealPlanner {

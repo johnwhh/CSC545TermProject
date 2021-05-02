@@ -1,8 +1,9 @@
 // This project has no license.
+// Created on: 28-04-2021
 package mealplanner;
 
 /**
- * @date 28-04-2021
+ *
  * @author johnholtzworth
  */
 public interface ModelUpdater {
