@@ -1,5 +1,5 @@
 # CSC 545 Term Project [![tests](https://github.com/johnwhh/CSC545TermProject/actions/workflows/main.yml/badge.svg)](https://github.com/johnwhh/CSC545TermProject/actions/workflows/main.yml)
-This is project is the work of John Holtzworth, Matthew Abney and Jessica Haeckler.
+This project is the work of John Holtzworth, Matthew Abney and Jessica Haeckler.
 ## Setup
 ### Initializing the database
 In order for the application to store data, you must run the Oracle SQL script called `mealPlan.sql`.  This will set up the tables with the correct schema as required by the app.
